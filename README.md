@@ -1,6 +1,5 @@
 # AuroraCompiler
 
--------
 A compiler made by Preston Hager for practice on making compilers. Also for fun.
 
 -------
