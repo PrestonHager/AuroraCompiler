@@ -1,12 +1,13 @@
 # main.py
 
 import sys
+from aurora_lexer import *
 
 raw_input=input
 def main():
     if len(sys.argv) > 1:
         with open(sys.argv[1], 'r') as f_in:
-            f_in.read()
+            print(AuroraLexer(f_in.read()).tokenized_code)
     else:
         while True:
             sys.stdout.write(">>> ")

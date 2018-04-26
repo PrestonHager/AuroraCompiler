@@ -43,7 +43,7 @@ say_hi>"EXAMPLE";
 // this will print "Hi, EXAMPLE" to the screen.
 
 // if statements are done like so (the space spaces are optional here),
-if {variable == 15}; then;
+if>variable == 15; then;
   // declare the if tag and an expression to test. then a then tag.
   // inside this we can run  multiple lines of code.
   // if no "then" tag is declared it only runs one line and no end tag can be declared.
@@ -51,7 +51,7 @@ if {variable == 15}; then;
 end;
 
 // example of one lined if.
-if{variable+2 ==17};
+if>variable+2 ==17;
   // comments don't count as lines of code.
   println>"That's true, varaible+2 is equal to 17.";
 // never write the above code, it's not readable at all.
