@@ -4,37 +4,37 @@
 // all commands end with a semi colon.
 
 // a print statement prints to the screen exactly what is in the input string.
-print("Somewhere over the rainbow!");
+print>"Somewhere over the rainbow!";
 
 // println adds a newline after the end.
-println("Next line....");
-print("Now I'm on a new line.");
+println>"Next line....";
+print>"Now I'm on a new line.";
 
 // a variable is defined by it's type, name, =, and then the value.
 // to define a string it's:
-String IM_A_STRING = "Some string.";
+String: IM_A_STRING = "Some string.";
 // to define an integer it's:
-Number IM_AN_INT = 100;
+Number: IM_AN_INT = 100;
 // to define a float it's
-Number IM_A_FLOAT = 3.1415;
+Number: IM_A_FLOAT = 3.1415;
 
 // you can also do math!
 // addition uses the + sign. subtraction the -, division the /, and multiplication the *.
 // for example, variable is 5 * 3, which is 15.
-Number variable = 5 * 3;
+Number: variable = 5 * 3;
 
 // to define a function:
 // the "func" tag starts the definition. the next is the function name with parentheses incasing the parameters.
 // the parameters have names and a double colon to define the type of input.
 // the next part is what the function returns, in this case nothing.
-func say_hi(name::String) => Void;
+func: say_hi(name::String) => Void;
   // inside this function we say hi to the variable name by printing.
   print("Hi, ");
   println(name);
   // and we end the definition of the function with the "end" tag.
 end;
 
-func new(var::Number) => Number;
+func: new(var::Number) => Number;
   return 0;
 end;
 
