@@ -27,19 +27,19 @@ Number: variable = 5 * 3;
 // the "func" tag starts the definition. the next is the function name with parentheses incasing the parameters.
 // the parameters have names and a double colon to define the type of input.
 // the next part is what the function returns, in this case nothing.
-func: say_hi(name::String) => Void;
+func: say_hi>name::String => Void;
   // inside this function we say hi to the variable name by printing.
-  print("Hi, ");
-  println(name);
+  print>"Hi, ";
+  println>name;
   // and we end the definition of the function with the "end" tag.
 end;
 
-func: new(var::Number) => Number;
+func: new>var::Number => Number;
   return 0;
 end;
 
 // to call this all we need is the following.
-say_hi("EXAMPLE");
+say_hi>"EXAMPLE";
 // this will print "Hi, EXAMPLE" to the screen.
 
 // if statements are done like so (the space spaces are optional here),
@@ -47,11 +47,11 @@ if {variable == 15}; then;
   // declare the if tag and an expression to test. then a then tag.
   // inside this we can run  multiple lines of code.
   // if no "then" tag is declared it only runs one line and no end tag can be declared.
-  say_hi(IM_A_STRING);
+  say_hi>IM_A_STRING;
 end;
 
 // example of one lined if.
 if{variable+2 ==17};
   // comments don't count as lines of code.
-  println("That's true, varaible+2 is equal to 17.");
+  println>"That's true, varaible+2 is equal to 17.";
 // never write the above code, it's not readable at all.
