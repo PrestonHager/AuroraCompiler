@@ -1,10 +1,10 @@
 # Introduction
 
 ### Contents
-1) **The [Introduction][0]** contains a list of contents and other useful information.
-2) **The [Plan][1]** describes the proccess of writing this compiler.
-3) **The [Lexer][2], [Parser][3], and [Generator][4]** pages describe the function and a timeline for each aspect respectively.
-4) **The [Syntax][5]** has an in depth describtion of the syntax and grammar of the Aurora.
+  1) **The [Introduction][0]** contains a list of contents and other useful information.
+  2) **The [Plan][1]** describes the proccess of writing this compiler.
+  3) **The [Lexer][2], [Parser][3], and [Generator][4]** pages describe the function and a timeline for each aspect respectively.
+  4) **The [Syntax][5]** has an in depth describtion of the syntax and grammar of the Aurora.
 
 
 
