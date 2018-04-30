@@ -7,10 +7,10 @@ It's goal is to help me (the author) practice and learn writing compilers.
 Eventually this will lead to making a compiler in either C or Assembly for my OS, [Startaste.](https://github.com/PrestonHager/Startaste)
 
 ------
-### What are technology is used?
+### What technology is used?
 
 This compiler is writen entirely in Python (because the client requested it), and will compiler to Python code as well.
-Github is used for version control and releases, and Read the Docs is used for documentation.
+GitHub is used for version control and releases, and Read the Docs is used for documentation.
 
 ------
 ### What are the features?
@@ -23,6 +23,7 @@ This will create Python code based on what the parser outputs and will then be e
 ------
 ### Timeline?
 
+* **Week 0:** The plan.
 * **Week 1:** Define the language terminology and make an example file.
 * **Week 2:** Create the lexer/tokenizer.
 * **Week 3-4:** Create the parser.
