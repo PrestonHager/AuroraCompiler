@@ -36,3 +36,64 @@ Functions are a large part of most programming languages.
 For older more retro languages, labels are usually used, these however, can become confusing and over crowded.
 Functions take an input and return an output based on those inputs.
 Some functions might also have no input, or no output.
+
+#### Defining a Function
+
+Functions are defined similarly to variables.
+The following format can be used, where anything in the square brackets is replaced with their described values.
+```
+func: [Function Name]>[Argument 1]::[Type], [Arugment 2]::[Type...] => [Return Type];
+```
+The Function Name is used whenever the function is called or invoked.
+The Arugment(s) are required parameters to execute the function.
+And the Return Type is the type of variable returned by the function.
+This may be Void, saying that the function will not return a specific type.
+
+A function's arguments/parameters may also be nothing, or include optional or predefined values.
+The following is an example of a function taking no arguments.
+```
+func: fooBar> => Number
+  return 32
+```
+This function, named "fooBar", can be called using `foobar>;` and will return the number 32.
+The following is an example of a function with one required, and one optional argument.
+```
+func: rainbows>colors::String{}, pretty::Number=1 => Void;
+  for>Number:i=0, i ?< colors.length>, i=i+1;
+    print>colors{i}+"-";
+  println>"";
+  if>pretty ?= 1;
+    println>"It's a pretty rainbow.";
+  else;
+    println>"It's just a rainbow.";
+```
+
+#### Calling/Invoking a Function
+
+A function call consists of the function name, and a set of values to pass into the function as input.
+For example the print function takes a string as a parameter and prints it to the display.
+The following is an example of a print function call.
+```
+print>"Somewhere over the rainbow.";
+```
+A function may also have more than one, none, or optional arguments/parameters.
+In the previous example of the function "rainbows" can be called with either one or two arguments.
+Both of the following will return the same result.
+```
+String{}: rainbowColors = {"Red","Orange","Yellow","Green","Blue","Indigo","Violet"};
+rainbows>rainbowColors;
+rainbows>rainbowColors, 1;
+```
+The result will be displayed as the following.
+```
+Red-Orange-Yello-Green-Blue-Indigo-Violet
+It's a pretty rainbow.
+```
+
+### Using Python Code inside Aurora
+
+Python code can also be used inside Aurora, it isn't as pretty because, it doesn't match with the other code, but it can be done.
+To use Python code use the following syntax, replacing "[Python Code]" with the Python code wanted.
+```
+\&PythonCode>[PythonCode]\&EndCode;
+```
