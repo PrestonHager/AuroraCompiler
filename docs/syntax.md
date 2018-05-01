@@ -6,7 +6,7 @@ The basis of all programming languages is definitions and math.
 To define a variable in Aurora is simple.
 You must know the *type*, the *name*, and a *value*.
 Definition is then as follows.
-```
+```aurora
 [Type]: [Name] = [Value]
 ```
 There are many types, and one can also create their own variable type.
@@ -41,7 +41,7 @@ Some functions might also have no input, or no output.
 
 Functions are defined similarly to variables.
 The following format can be used, where anything in the square brackets is replaced with their described values.
-```
+```aurora
 func: [Function Name]>[Argument 1]::[Type], [Arugment 2]::[Type...] => [Return Type];
 ```
 The Function Name is used whenever the function is called or invoked.
@@ -51,13 +51,13 @@ This may be Void, saying that the function will not return a specific type.
 
 A function's arguments/parameters may also be nothing, or include optional or predefined values.
 The following is an example of a function taking no arguments.
-```
+```aurora
 func: fooBar> => Number
   return 32
 ```
 This function, named "fooBar", can be called using `foobar>;` and will return the number 32.
 The following is an example of a function with one required, and one optional argument.
-```
+```aurora
 func: rainbows>colors::String{}, pretty::Number=1 => Void;
   for>Number:i=0, i ?< colors.length>, i=i+1;
     print>colors{i}+"-";
@@ -73,27 +73,42 @@ func: rainbows>colors::String{}, pretty::Number=1 => Void;
 A function call consists of the function name, and a set of values to pass into the function as input.
 For example the print function takes a string as a parameter and prints it to the display.
 The following is an example of a print function call.
-```
+```aurora
 print>"Somewhere over the rainbow.";
 ```
 A function may also have more than one, none, or optional arguments/parameters.
 In the previous example of the function "rainbows" can be called with either one or two arguments.
 Both of the following will return the same result.
-```
+```aurora
 String{}: rainbowColors = {"Red","Orange","Yellow","Green","Blue","Indigo","Violet"};
 rainbows>rainbowColors;
 rainbows>rainbowColors, 1;
 ```
 The result will be displayed as the following.
-```
+```aurora
 Red-Orange-Yello-Green-Blue-Indigo-Violet
 It's a pretty rainbow.
 ```
 
+------
+### Comments
+
+Another thing to help with readablity is comments.
+Every human readable programming language has comments.
+Most comments are either defined using a double slash (`//`) or pound/hashtag (`#`).
+Aurora is no exception, it uses double slashes as a comment.
+There are no multiline comments, and any line that has a comment must start with it and continues to the end.
+Most code you will find will contain some comment somewhere, at least at the begining of the file giving the file name and possibly a discribtion.
+Like so:
+```
+// example.aurora: Aurora Example file for the Aurora Compile and Language. 
+```
+
+------
 ### Using Python Code inside Aurora
 
 Python code can also be used inside Aurora, it isn't as pretty because, it doesn't match with the other code, but it can be done.
 To use Python code use the following syntax, replacing "[Python Code]" with the Python code wanted.
-```
+```aurora
 \&PythonCode>[PythonCode]\&EndCode;
 ```
