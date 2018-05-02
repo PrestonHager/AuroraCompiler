@@ -15,20 +15,19 @@ class AuroraLexer:
     def _lex(self, code):
         current_id = ""
         index = -1
-        position = [-1, -1]
+        position = [0, 1]
         in_comment = False
         in_string = False
         while index < len(code)-1:
             index += 1
             position[0] += 1
             if code[index] == "\n":
-                position[1] += 1
-                position[0] = 0
                 if in_comment:
                     in_comment = False
-                current_id += "\n"
-                self.tokenized_code.append(("ID", current_id, copy(position)))
-                current_id = ""
+                    self.tokenized_code.append(["ID", current_id, copy(position)])
+                    current_id = ""
+                position[1] += 1
+                position[0] = 0
                 continue
             if in_comment:
                 current_id += code[index]
@@ -36,9 +35,9 @@ class AuroraLexer:
             if in_string:
                 if code[index] == "\"":
                     in_string = False
-                    self.tokenized_code.append(("ID", current_id, copy(position)))
+                    self.tokenized_code.append(["ID", current_id, copy(position)])
                     current_id = ""
-                    self.tokenized_code.append(("END_STRING_DEF", "\"", copy(position)))
+                    self.tokenized_code.append(["END_STRING_DEF", "\"", copy(position)])
                     continue
                 else:
                     current_id += code[index]
@@ -48,9 +47,9 @@ class AuroraLexer:
                 operation = self.operations[key]
                 if ''.join(code[index:index+len(operation)]) == operation:
                     if current_id != "":
-                        self.tokenized_code.append(("ID", current_id, copy(position)))
+                        self.tokenized_code.append(["ID", current_id, copy(position)])
                         current_id = ""
-                    self.tokenized_code.append((key, operation, copy(position)))
+                    self.tokenized_code.append([key, operation, copy(position)])
                     index += len(operation)-1
                     position[0] += len(operation)-1
                     if key == "STRING_DEF":
