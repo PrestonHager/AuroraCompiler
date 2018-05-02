@@ -26,8 +26,9 @@ class AuroraLexer:
                 position[0] = 0
                 if in_comment:
                     in_comment = False
-                    self.tokenized_code.append(("ID", current_id, copy(position)))
-                    current_id = ""
+                current_id += "\n"
+                self.tokenized_code.append(("ID", current_id, copy(position)))
+                current_id = ""
                 continue
             if in_comment:
                 current_id += code[index]
