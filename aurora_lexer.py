@@ -34,6 +34,7 @@ class AuroraLexer:
                 continue
             if in_string:
                 if code[index] == "\"":
+                    in_string = False
                     self.tokenized_code.append(("ID", current_id, copy(position)))
                     current_id = ""
                     self.tokenized_code.append(("END_STRING_DEF", "\"", copy(position)))
