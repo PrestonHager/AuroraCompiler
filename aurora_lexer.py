@@ -7,7 +7,7 @@ class AuroraLexer:
         self.tokenized_code = []
         self.operations = {}
         with open("operations.txt", 'r') as f_in:
-            for line in f_in.read().split("\n"):
+            for line in f_in.read().strip().split("\n"):
                 self.operations[line.split(":=")[0]] = ''.join(line.split(":=")[1:])
         self.operation_keys = sorted(self.operations, key=lambda k: len(self.operations[k]), reverse=True)
         self._lex(code)
