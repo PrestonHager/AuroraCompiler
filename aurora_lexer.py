@@ -6,9 +6,31 @@ class AuroraLexer:
     def __init__(self, code):
         self.tokenized_code = []
         self.operations = {}
+        self.operations_2 = {}
         with open("operations.txt", 'r') as f_in:
             for line in f_in.read().strip().split("\n"):
-                self.operations[line.split(":=")[0]] = ''.join(line.split(":=")[1:])
+                if len(line.split(":=")) > 1:
+                    self.operations[line.split(":=")[0]] = ''.join(line.split(":=")[1:])
+                elif len(line.split("=:")) > 1:
+                    self.operations_2[line.split("=:")[0]] = ''.join(line.split("=:")[1:])
+        for key in self.operations_2:
+            characters = self.operations_2[key]
+            in_set = False
+            set = []
+            new_characters = []
+            for char in characters:
+                if in_set and char != "-":
+                    set.append(char)
+                if char == "]":
+                    in_set = False
+                    new_characters += [chr(i) for i in range(ord(set[0]), ord(set[1])+1)]
+                    set = []
+                    continue
+                if char == "[":
+                    in_set = True
+                if not in_set:
+                    new_characters.append(char)
+            self.operations_2[key] = new_characters
         self.operation_keys = sorted(self.operations, key=lambda k: len(self.operations[k]), reverse=True)
         self._lex(code)
 
@@ -18,6 +40,7 @@ class AuroraLexer:
         position = [0, 1]
         in_comment = False
         in_string = False
+        in_operation = [False, "", ""]
         while index < len(code)-1:
             index += 1
             position[0] += 1
@@ -29,6 +52,14 @@ class AuroraLexer:
                 position[1] += 1
                 position[0] = 0
                 continue
+            if in_operation[0]:
+                if code[index] in in_operation[1]:
+                    current_id += code[index]
+                    continue
+                else:
+                    self.tokenized_code.append([in_operation[2], current_id, copy(position)])
+                    current_id = ""
+                    in_operation = [False, "", ""]
             if in_comment:
                 current_id += code[index]
                 continue
@@ -58,6 +89,15 @@ class AuroraLexer:
                         in_comment = True
                     continue_loop = True
                     break
+            for key in self.operations_2:
+                characters = self.operations_2[key]
+                if code[index] in characters:
+                    in_operation = [True, characters, key]
+                    current_id = code[index]
+                    continue_loop = True
+                    break
+            if continue_loop:
+                continue
             if continue_loop:
                 continue
             current_id += code[index]
