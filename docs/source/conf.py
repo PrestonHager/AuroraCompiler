@@ -24,9 +24,9 @@ copyright = '2018, Preston Hager'
 author = 'Preston Hager'
 
 # The short X.Y version
-version = ''
+version = '0.0.1'
 # The full version, including alpha/beta/rc tags
-release = ''
+release = 'alpha-0.0.1'
 
 
 # -- General configuration ---------------------------------------------------
@@ -109,7 +109,7 @@ htmlhelp_basename = 'AuroraCompilerdoc'
 latex_elements = {
     # The paper size ('letterpaper' or 'a4paper').
     #
-    # 'papersize': 'letterpaper',
+    'papersize': 'letterpaper',
 
     # The font size ('10pt', '11pt' or '12pt').
     #

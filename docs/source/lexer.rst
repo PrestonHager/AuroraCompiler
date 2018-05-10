@@ -20,5 +20,5 @@ Timeline?
 -  **Day 2:** Continue working on lexer code and complete it.
 -  **Day 3:** Polish the lexer, fix any bugs.
 
-.. _Parser page: http://auroracompiler.rtfd.io/en/latest/parser
-.. _Synatax page.: https://auroracompiler.rtfd.io/en/latest/syntax
+.. _Parser page: http://auroracompiler.rtfd.io/en/latest/parser.html
+.. _Synatax page.: https://auroracompiler.rtfd.io/en/latest/syntax.html
