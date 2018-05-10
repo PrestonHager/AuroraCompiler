@@ -10,7 +10,6 @@ These tokens are in a array (list), with the token type, the value, and the posi
 The parser will take these tokens next.
 For more see the [Parser page](http://auroracompiler.rtfd.io/en/latest/parser), or [Synatax page.](https://auroracompiler.rtfd.io/en/latest/syntax)
 
---------
 ### Timeline?
 
 * **Day 1:** Create a list of token types and definitions. Then start on lexer code.

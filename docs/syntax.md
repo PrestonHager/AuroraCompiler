@@ -19,7 +19,6 @@ Notice the double quotation marks on either side of the value.
 
 A list of types with their expected values can be found on the [Types page.](http://auroracompiler.rtfd.io/en/latest/types)
 
--------
 ### Math
 
 The other basic of programming languages is math.
@@ -29,7 +28,6 @@ As such the addition, subtraction, multiplication, division, and powers are used
 Groups are defined by opening and closing parentheses (`()`), or square brackets (`[]`).
 For more complex math, there is a builtin math library with more functions. 
 
-------
 ### Functions
 
 Functions are a large part of most programming languages.
@@ -90,7 +88,6 @@ Red-Orange-Yello-Green-Blue-Indigo-Violet
 It's a pretty rainbow.
 ```
 
-------
 ### Comments
 
 Another thing to help with readablity is comments.
@@ -104,7 +101,6 @@ Like so:
 // example.aurora: Aurora Example file for the Aurora Compile and Language. 
 ```
 
-------
 ### Using Python Code inside Aurora
 
 Python code can also be used inside Aurora, it isn't as pretty because, it doesn't match with the other code, but it can be done.
