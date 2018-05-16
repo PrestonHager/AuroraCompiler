@@ -57,19 +57,5 @@ Timeline?
 
 -  **Week 6:** Debug week. Test as much as possible and find all the
    bugs and fix them.
-   
-<ul class="footer_nav">
-    {%- if prev %}
-        <li class="prev">
-            Previous topic: <a href="{{ prev.link|e }}">{{ prev.title }}</a>
-        </li>
-    {%- endif %}
-
-    {%- if next %}
-        <li class="next">
-            Next topic: <a href="{{ next.link|e }}">{{ next.title }}</a>
-        </li>
-    {%- endif %}
-</ul>
 
 .. _Startaste.: https://github.com/PrestonHager/Startaste
