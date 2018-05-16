@@ -10,7 +10,7 @@ define a variable in Aurora is simple. You must know the *type*, the
 
 .. code::
 
-   [Type]: [Name] = [Value]
+    [Type]: [Name] = [Value]
 
 There are many types, and one can also create their own variable type.
 Names consist of standard ASCII characters, underscores, and digits; a
@@ -55,7 +55,7 @@ described values.
 
 .. code::
 
-   func: [Function Name]>[Argument 1]::[Type], [Arugment 2]::[Type...] => [Return Type];
+    func: [Function Name]>[Argument 1]::[Type], [Arugment 2]::[Type...] => [Return Type];
 
 The Function Name is used whenever the function is called or invoked.
 The Arugment(s) are required parameters to execute the function. And the
@@ -68,8 +68,8 @@ taking no arguments.
 
 .. code::
 
-   func: fooBar> => Number
-     return 32
+    func: fooBar> => Number
+        return 32
 
 This function, named “fooBar”, can be called using ``foobar>;`` and will
 return the number 32. The following is an example of a function with one
@@ -77,14 +77,14 @@ required, and one optional argument.
 
 .. code::
 
-   func: rainbows>colors::String{}, pretty::Number=1 => Void;
-      for>Number:i=0, i ?< colors.length>, i=i+1;
-      print>colors{i}+"-";
-      println>"";
-      if>pretty ?= 1;
-      println>"It's a pretty rainbow.";
-      else;
-      println>"It's just a rainbow.";``
+    func: rainbows>colors::String{}, pretty::Number=1 => Void;
+        for>Number:i=0, i ?< colors.length>, i=i+1;
+        print>colors{i}+"-";
+        println>"";
+        if>pretty ?= 1;
+        println>"It's a pretty rainbow.";
+        else;
+        println>"It's just a rainbow.";``
 
 
 .. _Types page.: http://auroracompiler.rtfd.io/en/latest/types.html

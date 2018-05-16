@@ -12,6 +12,39 @@ characters to *tokenize* the content. These tokens are in a array
 will take these tokens next. For more see the `Parser page`_, or
 `Synatax page.`_
 
+Input & Output
+^^^^^^^^^^^^^^
+
+The input is the actual code. This is in an asii or unicode encoding,
+basically plain text. The output is a list of tokens, which is usually
+shown as a table in human-friendly formats. A token is yet another list,
+or rather a tuple, containing the token name, token value, and position.
+The following is an example of an input and output for the Lexer.
+
+Input:
+
+.. code::
+    
+    print>"Somewhere over the rainbow!";
+
+Ouput:
+
++-------------------+-------------------------------+-----------+
+| Token ID          | Token Value                   | Position  |
++===================+===============================+===========+
+| ID                | print                         | 1, 1      |
++-------------------+-------------------------------+-----------+
+| FUNC              | >                             | 6, 1      |
++-------------------+-------------------------------+-----------+
+| STRING_DEF        | "                             | 7, 1      |
++-------------------+-------------------------------+-----------+
+| ID                | Somewhere over the rainbow!   | 8, 1      |
++-------------------+-------------------------------+-----------+
+| END_STRING_DEF    | "                             | 14, 1     |
++-------------------+-------------------------------+-----------+
+| ENDLINE           | ;                             | 15, 1     |
++-------------------+-------------------------------+-----------+
+
 Timeline?
 ~~~~~~~~~
 
