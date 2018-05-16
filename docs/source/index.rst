@@ -1,11 +1,3 @@
-.. toctree::
-   index
-   plan
-   lexer
-   parser
-   generator
-   syntax
-
 Introduction
 ============
 
@@ -19,6 +11,8 @@ Contents
    describe the function and a timeline for each aspect respectively.
 4. **The** :ref:`Syntax`_ has an in depth describtion of the syntax and
    grammar of the Aurora.
+
+.. toctree::
 
 .. _Introduction: http://auroracompiler.rtfd.io/en/latest/
 .. _Plan: http://auroracompiler.rtfd.io/en/latest/plan.html
