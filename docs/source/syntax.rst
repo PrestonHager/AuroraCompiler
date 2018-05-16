@@ -74,6 +74,16 @@ taking no arguments.
 This function, named “fooBar”, can be called using ``foobar>;`` and will
 return the number 32. The following is an example of a function with one
 required, and one optional argument.
-\`\ ``aurora func: rainbows>colors::String{}, pretty::Number=1 => Void;   for>Number:i=0, i ?< colors.length>, i=i+1;     print>colors{i}+"-";   println>"";   if>pretty ?= 1;     println>"It's a pretty rainbow.";   else;     println>"It's just a rainbow.";``
+
+.. code:: aurora
+
+   func: rainbows>colors::String{}, pretty::Number=1 => Void;
+      for>Number:i=0, i ?< colors.length>, i=i+1;
+      print>colors{i}+"-";
+      println>"";
+      if>pretty ?= 1;
+      println>"It's a pretty rainbow.";
+      else;
+      println>"It's just a rainbow.";``
 
 .. _Types page.: http://auroracompiler.rtfd.io/en/latest/types.html
