@@ -8,7 +8,7 @@ The basis of all programming languages is definitions and math. To
 define a variable in Aurora is simple. You must know the *type*, the
 *name*, and a *value*. Definition is then as follows.
 
-.. code:: aurora
+.. code::
 
    [Type]: [Name] = [Value]
 
@@ -53,7 +53,7 @@ Functions are defined similarly to variables. The following format can
 be used, where anything in the square brackets is replaced with their
 described values.
 
-.. code:: aurora
+.. code::
 
    func: [Function Name]>[Argument 1]::[Type], [Arugment 2]::[Type...] => [Return Type];
 
@@ -66,7 +66,7 @@ A function’s arguments/parameters may also be nothing, or include
 optional or predefined values. The following is an example of a function
 taking no arguments.
 
-.. code:: aurora
+.. code::
 
    func: fooBar> => Number
      return 32
@@ -75,7 +75,7 @@ This function, named “fooBar”, can be called using ``foobar>;`` and will
 return the number 32. The following is an example of a function with one
 required, and one optional argument.
 
-.. code:: aurora
+.. code::
 
    func: rainbows>colors::String{}, pretty::Number=1 => Void;
       for>Number:i=0, i ?< colors.length>, i=i+1;
@@ -85,5 +85,6 @@ required, and one optional argument.
       println>"It's a pretty rainbow.";
       else;
       println>"It's just a rainbow.";``
+
 
 .. _Types page.: http://auroracompiler.rtfd.io/en/latest/types.html
