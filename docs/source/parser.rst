@@ -47,7 +47,7 @@ Output:
         "children": [
             {
                 "token_type": "string",
-                "token_value": "Hello!",
+                "token_value": "Somewhere over the rainbow!",
                 "children": []
             }]
         }

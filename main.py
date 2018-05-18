@@ -1,15 +1,17 @@
 # main.py
 
 import sys
-from aurora_parser import *
+from aurora_generator import *
 
 raw_input=input
 def main():
     if len(sys.argv) > 1:
         with open(sys.argv[1], 'r') as f_in:
-            parser = AuroraParser(f_in.read())
-            print(parser._lexer.tokenized_code)
-            code = ''.join([ item[1] for item in parser._lexer.tokenized_code ])
+            generator = AuroraGenerator(f_in.read())
+            print(generator._parser._lexer.tokenized_code)
+            print(generator._parser.parsed_code)
+            print(generator.generated_code)
+            code = ''.join([ item[1] for item in generator._parser._lexer.tokenized_code ])
     else:
         while True:
             sys.stdout.write(">>> ")

@@ -17,4 +17,4 @@ COMPARE_EQUALS:=?=
 COMMENT:=//
 
 NUMBER=:[0-9]
-VARIBLE=:_[A-Z][a-z]
+VARIABLE=:_[A-Z][a-z]
