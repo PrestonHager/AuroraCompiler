@@ -30,6 +30,9 @@ class AuroraParser:
                 id = self._lexer.tokenized_code[token_index+1][1]
                 token_index += 2
                 return self._create_new_token("comment", id)
+        if self._accept("IMPORT", token_index):
+            if self._accept("VARIABLE", token_index+1):
+                id = self._lexer.tokenized_code[token_index+1][1]
         if self._accept("VARIABLE", token_index):
             id = self._lexer.tokenized_code[token_index][1]
             if id not in self.parsed_code["initialized"]["all"]:

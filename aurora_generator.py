@@ -11,12 +11,11 @@ class AuroraGenerator:
     def _generate(self, tokens):
         for token in tokens:
             if token["token_type"] == "function":
-                self.generated_code += "{function_name}({arguments})\n".format(function_name=token["token_value"], arguments=self._generate_arguments(token["children"]))
+                self.generated_code += "_aurora_{function_name}({arguments})\n".format(function_name=token["token_value"], arguments=self._generate_arguments(token["children"]))
     
     def _generate_arguments(self, tokens):
         generated_code = ""
         for token in tokens:
-            print(token)
             if token["token_type"] == "string":
                 generated_code += ", \"{string}\"".format(string=token["token_value"])
         return generated_code.strip(",")
