@@ -56,5 +56,5 @@ This project is licensed under the GNU General Public License v3.0, see the [LIC
 (C) Preston Hager 2018-2019
 
 [1]: https://www.python.org
-[2]: https://auroracompiler.readthedocs.io/en/latest
+[2]: http://auroracompiler.readthedocs.io/en/latest
 [3]: https://readthedocs.org
