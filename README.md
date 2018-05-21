@@ -1,7 +1,55 @@
-# AuroraCompiler
+# Aurora Compiler
 
-A compiler made by Preston Hager for practice on making compilers. Also for fun.
+Aurora is a simple language aimed towards low level implementation with readability.
+It was made for practice with compilers, and for an IT class.
 
--------
+## Current Progress
 
-(C) 2018-2019 Preston Hager
+The following is a list of what has been completed, what is being worked on, and what is planned in the future.
+Items in **bold** have been completed.
+Items in plain text are in progress.
+Items in *italics* are planned.
+
+* **Lexer**
+* **Parser**
+* *Generator*
+* *Syntax*
+
+## Getting Started
+
+Aurora compiler can be run using:
+
+```
+python main.py [filename]
+```
+
+`[filename]` is optional, and replaced by whichever file you want to compile.
+The `.aurora` file will be compiled to a `.py` Python file.
+
+### Prerequisites and Installing
+
+Python is needed and can be found at their website, [Python.org](1).
+
+## Built With
+
+* [Python](1) - Development language
+
+## Contributing
+
+If you would like to Contribute to this project, please do.
+It's open source for a reason after all.
+Simply submit a Pull Request or Issue here on Github.
+
+## Authors
+
+* **Preston Hager** - *Programmer* - [Github Profile](https://github.com/PrestonHager)
+
+See also the list of [contributors](https://github.com/PrestonHager/SoundBytes/blob/master/CONTRIBUTORS.md) who participated in this project.
+
+## License
+
+This project is licensed under the GNU General Public License v3.0, see the [LICENSE](https://github.com/PrestonHager/AuroraCompiler/blob/master/LICENSE) file for details.
+
+(C) Preston Hager 2018-2019
+
+[1]: https://www.python.org
