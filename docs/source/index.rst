@@ -9,4 +9,5 @@ Table of Contents
     lexer
     parser
     generator
+    subset0
     syntax
