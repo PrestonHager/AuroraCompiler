@@ -4,16 +4,16 @@ Introduction
 Contents
 ~~~~~~~~
 
-1. **The `Introduction`_** contains a list of contents and other useful
+1. The `Introduction`_ contains a list of contents and other useful
    information.
-2. **The `Plan`_** describes the proccess of writing this compiler.
-3. **The `Lexer`_**, **`Parser`_**, and **`Generator`_** pages
+2. The `Plan`_ describes the proccess of writing this compiler.
+3. The `Lexer`_, `Parser`_, and `Generator`_ pages
    describe the function and a timeline for each aspect respectively.
-4. **The `Subset_`** pages describe subsets of the language that have
+4. The `Subset_` pages describe subsets of the language that have
    been implemented through the development of the language.
-5. **The `Syntax`_** has an in depth describtion of the syntax and
+5. The `Syntax`_ has an in depth describtion of the syntax and
    grammar of the Aurora.
-6. **The `Libraries`_** page has information about how to create,
+6. The `Libraries`_ page has information about how to create,
    install, publish, and include libraries in the Aurora language.
 
 .. _Introduction: http://auroracompiler.rtfd.io/en/latest/
