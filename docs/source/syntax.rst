@@ -56,11 +56,15 @@ described values.
 .. code::
 
     func: [Function Name]>[Argument 1]::[Type], [Arugment 2]::[Type...] => [Return Type];
+    end;
 
 The Function Name is used whenever the function is called or invoked.
 The Arugment(s) are required parameters to execute the function. And the
 Return Type is the type of variable returned by the function. This may
-be Void, saying that the function will not return a specific type.
+be Void, saying that the function will not return a specific type. Also
+note the ``end`` tag after the function defintion. This is required so
+that aurora can tell when to stop exectuing code from the function. It
+will also stop executing code if a value is returned from the function.
 
 A function’s arguments/parameters may also be nothing, or include
 optional or predefined values. The following is an example of a function
@@ -69,7 +73,8 @@ taking no arguments.
 .. code::
 
     func: fooBar> => Number
-        return 32
+        return 32;
+    end;
 
 This function, named “fooBar”, can be called using ``foobar>;`` and will
 return the number 32. The following is an example of a function with one
@@ -84,7 +89,8 @@ required, and one optional argument.
         if>pretty ?= 1;
         println>"It's a pretty rainbow.";
         else;
-        println>"It's just a rainbow.";``
+        println>"It's just a rainbow.";
+    end;
 
 Calling a Function
 ^^^^^^^^^^^^^^^^^^
@@ -98,6 +104,7 @@ following code, then it may be called.
 
     func: barBar> => Void;
         println>"fooFoo";
+    end;
     
     barBar>;
 
