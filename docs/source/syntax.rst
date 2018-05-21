@@ -123,5 +123,5 @@ called. However, to do this the following line must be added to the top of the
 page, ``include>io;``. This will "import" or "include" the I/O library so that
 the functions ``print`` and ``println`` can be called later in the code.
 
-.. _Types: https://auroracompiler.rtfd.io/en/latest/types.html
-.. _Libraries: https://auroracompiler.rtfd.io/en/latest/libraries.html
+.. _Types: http://auroracompiler.rtfd.io/en/latest/types.html
+.. _Libraries: http://auroracompiler.rtfd.io/en/latest/libraries.html
