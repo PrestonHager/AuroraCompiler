@@ -14,6 +14,7 @@ Items in *italics* are planned.
 * **Parser**
 * *Generator*
 * *Syntax*
+* Includes
 
 ## Getting Started
 
@@ -44,7 +45,7 @@ Simply submit a Pull Request or Issue here on Github.
 
 * **Preston Hager** - *Programmer* - [Github Profile](https://github.com/PrestonHager)
 
-See also the list of [contributors](https://github.com/PrestonHager/SoundBytes/blob/master/CONTRIBUTORS.md) who participated in this project.
+See also the list of [contributors](https://github.com/PrestonHager/AuroraCompiler/blob/master/CONTRIBUTORS.md) who participated in this project.
 
 ## License
 
