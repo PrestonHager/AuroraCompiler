@@ -9,7 +9,7 @@ Contents
 2. The `Plan`_ describes the proccess of writing this compiler.
 3. The `Lexer`_, `Parser`_, and `Generator`_ pages
    describe the function and a timeline for each aspect respectively.
-4. The `Subset_` pages describe subsets of the language that have
+4. The `Subset`_ pages describe subsets of the language that have
    been implemented through the development of the language.
 5. The `Syntax`_ has an in depth describtion of the syntax and
    grammar of the Aurora.
