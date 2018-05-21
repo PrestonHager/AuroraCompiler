@@ -17,5 +17,5 @@ class AuroraGenerator:
         generated_code = ""
         for token in tokens:
             if token["token_type"] == "string":
-                generated_code += ", \"{string}\"".format(string=token["token_value"])
+                generated_code += ",\"{string}\"".format(string=token["token_value"])
         return generated_code.strip(",")
