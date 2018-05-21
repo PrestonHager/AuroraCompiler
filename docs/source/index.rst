@@ -11,3 +11,4 @@ Table of Contents
     generator
     subset0
     syntax
+    libraries
