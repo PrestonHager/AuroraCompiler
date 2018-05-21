@@ -21,8 +21,8 @@ then it must be an integer or float (a number). If the type is
 ``"[Value]"``. Notice the double quotation marks on either side of the
 value.
 
-A list of types with their expected values can be found on the `Types
-page.`_
+A list of types with their expected values can be found on the `Types`_
+page.
 
 Math
 ~~~~
@@ -86,5 +86,35 @@ required, and one optional argument.
         else;
         println>"It's just a rainbow.";``
 
+Calling a Function
+^^^^^^^^^^^^^^^^^^
 
-.. _Types page.: http://auroracompiler.rtfd.io/en/latest/types.html
+A defined function may be called as well. If it isn't defined then it cannot
+be called. For example in a completely empty file the function ``barBar``
+does not exist. But, if it is defined prior to calling it, such as in the
+following code, then it may be called.
+
+.. code::
+
+    func: barBar> => Void;
+        println>"fooFoo";
+    
+    barBar>;
+
+Including Functions
+^^^^^^^^^^^^^^^^^^^
+
+In an empty aurora file, no functions are defiend except one, ``include``.
+The include function can "import" or "include" other functions into the file.
+This helps with freeing space, and making things look nicer. There are also
+predefined librarys which can be imported without any extra installation.
+The full list can be found on the `Libraries`_ page, however the most basic
+ones are the I/O library by name ``io``, and the Math library by name ``math``.
+
+In most of the previous example, the function ``print`` or ``println`` is
+called. However, to do this the following line must be added to the top of the
+page, ``include>io;``. This will "import" or "include" the I/O library so that
+the functions ``print`` and ``println`` can be called later in the code.
+
+.. _Types: https://auroracompiler.rtfd.io/en/latest/types.html
+.. _Libraries: https://auroracompiler.rtfd.io/en/latest/libraries.html
