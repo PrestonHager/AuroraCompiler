@@ -54,4 +54,4 @@ Timeline?
 -  **Day 3:** Polish the lexer, fix any bugs.
 
 .. _Parser page: http://auroracompiler.rtfd.io/en/latest/parser.html
-.. _Synatax page.: https://auroracompiler.rtfd.io/en/latest/syntax.html
+.. _Synatax page.: http://auroracompiler.rtfd.io/en/latest/syntax.html
