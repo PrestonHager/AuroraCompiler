@@ -27,13 +27,15 @@ python main.py [filename]
 `[filename]` is optional, and replaced by whichever file you want to compile.
 The `.aurora` file will be compiled to a `.py` Python file.
 
+More can be found with the [aurora compiler documentation][2] on [Read the Docs][3].
+
 ### Prerequisites and Installing
 
-Python is needed and can be found at their website, [Python.org](1).
+Python is needed and can be found at their website, [Python.org][1].
 
 ## Built With
 
-* [Python](1) - Development language
+* [Python][1] - Development language
 
 ## Contributing
 
@@ -54,3 +56,5 @@ This project is licensed under the GNU General Public License v3.0, see the [LIC
 (C) Preston Hager 2018-2019
 
 [1]: https://www.python.org
+[2]: https://auroracompiler.readthedocs.io/en/latest
+[3]: https://readthedocs.org
