@@ -1,0 +1,10 @@
+// Testing Variable Definition
+
+include>io;
+
+println>"Variable Tests";
+
+// Define a variable.
+String: greeting = "Hello!";
+// and print it out.
+println>greeting

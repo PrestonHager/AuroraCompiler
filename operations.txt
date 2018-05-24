@@ -15,7 +15,7 @@ VOID_TYPE:=Void
 FUNC_TYPE:=func
 COMPARE_EQUALS:=?=
 COMMENT:=//
-IMPORT:=import
+END:=end
 
 NUMBER=:[0-9]
 VARIABLE=:_[A-Z][a-z]

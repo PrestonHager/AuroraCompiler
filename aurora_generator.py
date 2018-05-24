@@ -10,8 +10,12 @@ class AuroraGenerator:
     
     def _generate(self, tokens):
         for token in tokens:
-            if token["token_type"] == "function":
+            if token["token_value"] == "include":
+                self.generated_code += "from _aurora.{library_name} import *\n".format(library_name=token["children"][0]["token_value"])
+            elif token["token_type"] == "function":
                 self.generated_code += "_aurora_{function_name}({arguments})\n".format(function_name=token["token_value"], arguments=self._generate_arguments(token["children"]))
+            elif token["token_type"] == "comment":
+                self.generated_code += "# {comment}\n".format(comment=token["token_value"])
     
     def _generate_arguments(self, tokens):
         generated_code = ""

@@ -89,6 +89,8 @@ class AuroraLexer:
                         in_comment = True
                     continue_loop = True
                     break
+            if continue_loop:
+                continue
             for key in self.operations_2:
                 characters = self.operations_2[key]
                 if code[index] in characters:
@@ -96,8 +98,6 @@ class AuroraLexer:
                     current_id = code[index]
                     continue_loop = True
                     break
-            if continue_loop:
-                continue
             if continue_loop:
                 continue
             current_id += code[index]
