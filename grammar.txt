@@ -1,4 +1,0 @@
-variable := ID
-function := variable FUNC (input ","?)* ";"
-input := string | NUMBER | variable
-string := STRING_DEF ID END_STRING_DEF
