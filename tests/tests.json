@@ -1,0 +1,12 @@
+[
+{
+  "name": "Print Functions",
+  "file": "print.aurora",
+  "output": "Somewhere over the rainbow!"
+},
+{
+  "name": "Variable Definitions",
+  "file": "variables.aurora",
+  "output": "Hello!\n15\n"
+}
+]
