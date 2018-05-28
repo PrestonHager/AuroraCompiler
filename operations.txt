@@ -3,7 +3,10 @@ MINUS:=-
 FUNC:=>
 ASIGN:=:
 ENDLINE:=;
-VALUE:==
+VALUE0:=\s=\s
+VALUE1:=\s=
+VALUE2:==\s
+VALUE3:==
 TYPE:=::
 RETURN_TYPE:==>
 STRING_DEF:="

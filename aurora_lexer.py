@@ -10,7 +10,7 @@ class AuroraLexer:
         with open("operations.txt", 'r') as f_in:
             for line in f_in.read().strip().split("\n"):
                 if len(line.split(":=")) > 1:
-                    self.operations[line.split(":=")[0]] = ''.join(line.split(":=")[1:])
+                    self.operations[line.split(":=")[0]] = ''.join(line.split(":=")[1:]).replace("\\s", " ")
                 elif len(line.split("=:")) > 1:
                     self.operations_2[line.split("=:")[0]] = ''.join(line.split("=:")[1:])
         for key in self.operations_2:
@@ -80,7 +80,7 @@ class AuroraLexer:
                     if current_id != "":
                         self.tokenized_code.append(["ID", current_id, copy(position)])
                         current_id = ""
-                    self.tokenized_code.append([key, operation, copy(position)])
+                    self.tokenized_code.append([self._strip_numbers(key), operation, copy(position)])
                     index += len(operation)-1
                     position[0] += len(operation)-1
                     if key == "STRING_DEF":
@@ -101,3 +101,13 @@ class AuroraLexer:
             if continue_loop:
                 continue
             current_id += code[index]
+        if current_id != "" and in_operation[0]:
+            self.tokenized_code.append([in_operation[2], current_id, copy(position)])
+        elif current_id != "":
+            self.tokenized_code.append(["ID", current_id, copy(position)])
+
+    def _strip_numbers(self, string):
+        while string[-1] in "0123456789":
+            for num in "0123456789":
+                string = string.strip(num)
+        return string

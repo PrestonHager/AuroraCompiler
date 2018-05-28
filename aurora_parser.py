@@ -5,7 +5,7 @@ from aurora_lexer import AuroraLexer
 class AuroraParser:
     def __init__(self, code):
         self._lexer = AuroraLexer(code)
-        self.parsed_code = {"body": [], "initialized": {"all": [], "import": [], "defined": []}}
+        self.parsed_code = {"body": [], "initialized": {"all": [], "import": [], "defined": [], "required": []}}
         self.token_index = 0
         self._parse()
 
@@ -15,7 +15,7 @@ class AuroraParser:
         if self._lexer.tokenized_code[token_index][0] == token_id:
             return True
         return False
-    
+
     def _expect(self, token_id, max_depth, token_index):
         index = 0
         while index < max_depth or max_depth == -1 or index >= len(self._lexer.tokenized_code):
@@ -28,8 +28,8 @@ class AuroraParser:
 
     def _add_variable(self, var, section):
         if var not in self.parsed_code["initialized"][section]:
-            self.parsed_code["initialized"][section].append(var)    
-        
+            self.parsed_code["initialized"][section].append(var)
+
     def _statement(self, token_index):
         if self._accept("COMMENT", token_index):
             if self._accept("ID", token_index+1):
@@ -42,20 +42,30 @@ class AuroraParser:
                     id = self._lexer.tokenized_code[token_index+2][1]
                     self._add_variable(id, "all")
                     self._add_variable(id, "defined")
-                    if self._expect("VALUE", 3, token_index+3):
-                        i = 4
-                        value = self._expression(token_index+i)
-                        while value["token_type"] != "string" or self._lexer.tokenized_code[token_index+i][0] != "ENDLINE":
-                            variable_value = self._expression(token_index+i)
-                            i += 1
-                        return self._create_new_token("variable_string", id, variable_value)
+                    self._add_variable("string_variables", "required")
+                    if self._expect("VALUE", 1, token_index+3):
+                        variable_value = self._expression(token_index+4)
+                        return self._create_new_token("string_variable", id, [variable_value])
+                    else:
+                        return self._create_new_token("string_variable", id)
+        if self._accept("NUMBER_TYPE", token_index):
+            if self._expect("ASIGN", 1, token_index+1):
+                if self._expect("VARIABLE", 1, token_index+2):
+                    id = self._lexer.tokenized_code[token_index+2][1]
+                    self._add_variable(id, "all")
+                    self._add_variable(id, "defined")
+                    self._add_variable("number_variables", "required")
+                    if self._expect("VALUE", 1, token_index+3):
+                        variable_value = self._expression(token_index+4)
+                        return self._create_new_token("number_variable", id, [variable_value])
+                    else:
+                        return self._create_new_token("number_variable", id)
         if self._accept("VARIABLE", token_index):
             id = self._lexer.tokenized_code[token_index][1]
             self._add_variable(id, "all")
             if self._expect("FUNC", 1, token_index+1):
                 self._add_variable(id, "import")
                 arguments = []
-                arg = 1
                 arg_num = 0
                 while True:
                     arg = self._expression(token_index + 2 + arg_num)
@@ -64,10 +74,10 @@ class AuroraParser:
                         arg_num += 1
                     else:
                         break
-                token_index += 2 + len(arguments)
+                self.token_index += 2 + len(arguments)
                 return self._create_new_token("function", id, arguments)
         return False
-    
+
     def _expression(self, token_index):
         if self._accept("STRING_DEF", token_index):
             if self._expect("END_STRING_DEF", 2, token_index+1):
@@ -78,13 +88,25 @@ class AuroraParser:
             return self._create_new_token("number", number)
         if self._accept("VARIABLE", token_index):
             variable = self._lexer.tokenized_code[token_index][1]
-            return self._create_new_token("variable", variable)
+            arguments = []
+            arg_num = 1
+            while True:
+                arg = self._expression(token_index + arg_num*2)
+                if arg != False:
+                    arguments.append(arg)
+                    arg_num += 1
+                else:
+                    break
+            return self._create_new_token("variable", variable, arguments)
+        if self._accept("ID", token_index):
+            id = self._lexer.tokenized_code[token_index][1]
+            return self._create_new_token("id", id)
         return False
-    
+
     def _create_new_token(self, type, value="", children=[]):
         new_token = {"token_type": type, "token_value": value, "children": children}
         return new_token
-        
+
     def _parse(self):
         while self.token_index < len(self._lexer.tokenized_code):
             statement = self._statement(self.token_index)

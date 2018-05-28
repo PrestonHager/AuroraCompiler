@@ -13,7 +13,6 @@ def main():
     if len(sys.argv) > 1:
         with open(sys.argv[1], 'r') as f_in:
             generator = AuroraGenerator(f_in.read())
-            print(generator._parser.parsed_code)
             with open(sys.argv[1].strip(".aurora") + ".py", 'w') as f_out:
                 f_out.write(generator.generated_code)
             if "-r" in sys.argv or "--run" in sys.argv:
