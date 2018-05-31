@@ -1,6 +1,7 @@
 PLUS:=+
 MINUS:=-
 FUNC:=>
+ENDFUNC:=<
 ASIGN:=:
 ENDLINE:=;
 VALUE0:=\s=\s

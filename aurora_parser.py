@@ -34,7 +34,7 @@ class AuroraParser:
         if self._accept("COMMENT", token_index):
             if self._accept("ID", token_index+1):
                 id = self._lexer.tokenized_code[token_index+1][1]
-                token_index += 2
+                self.token_index += 1
                 return self._create_new_token("comment", id)
         if self._accept("STRING_TYPE", token_index):
             if self._expect("ASIGN", 1, token_index+1):
@@ -74,7 +74,7 @@ class AuroraParser:
                         arg_num += 1
                     else:
                         break
-                self.token_index += 2 + len(arguments)
+                self.token_index += 1 + len(arguments)
                 return self._create_new_token("function", id, arguments)
         return False
 
