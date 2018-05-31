@@ -45,7 +45,7 @@ class AuroraLexer:
                     new_characters.append(char)
             # set the new characters to the operation.
             self.operations_2[key] = new_characters
-        # sort the operations into a variable
+        # sort the operations by length of the value into a variable
         self.operation_keys = sorted(self.operations, key=lambda k: len(self.operations[k]), reverse=True)
         self._lex(code) # and the "lex" or "tokenize" the code
 
@@ -92,41 +92,49 @@ class AuroraLexer:
                 else: # otherwise add to the current_id
                     current_id += code[index]
                     continue
-            continue_loop = False
+            # now to detect whether a character (or range of characters) is in the operations
+            continue_loop = False # this is set to true to continue to the next index, if a success happens
+            # for each key in the operations
             for key in self.operation_keys:
                 operation = self.operations[key]
+                # if the character's between index and index+length of operation is equal to the operation
                 if ''.join(code[index:index+len(operation)]) == operation:
+                    # add current_id to tokenized_code if there is one
                     if current_id != "":
                         self.tokenized_code.append(["ID", current_id, copy(position)])
                         current_id = ""
-                    self.tokenized_code.append([self._strip_numbers(key), operation, copy(position)])
+                    # add the operation token to the tokenized_code
+                    self.tokenized_code.append([key, operation, copy(position)])
+                    # adjust the index and position variables
                     index += len(operation)-1
                     position[0] += len(operation)-1
+                    # if the operation was a string, or comment set the in_{variable} to true
                     if key == "STRING_DEF":
                         in_string = True
                     if key == "COMMENT":
                         in_comment = True
-                    continue_loop = True
+                    continue_loop = True # and continue the loop after breaking out of the for loop
                     break
             if continue_loop:
                 continue
+            # for the key in operations_2
             for key in self.operations_2:
                 characters = self.operations_2[key]
+                # if the current character is in the possible characters then
                 if code[index] in characters:
+                    # set in_operation to true, and store character, and key(the token name) in the varaible
                     in_operation = [True, characters, key]
-                    current_id = code[index]
-                    continue_loop = True
+                    current_id = code[index] # add the current character to the current_id
+                    continue_loop = True # and continue the loop
                     break
             if continue_loop:
                 continue
+            # if non of the above has worked (the character wasn't in any of the operations), then add it to the current_id
+            # it will be added to the tokenized_code the next time an operation is found
             current_id += code[index]
+        # at the end, an operation from operations_2 might still be, so add that
         if current_id != "" and in_operation[0]:
             self.tokenized_code.append([in_operation[2], current_id, copy(position)])
+        # if not, then the current_id might still be, so add that
         elif current_id != "":
             self.tokenized_code.append(["ID", current_id, copy(position)])
-
-    def _strip_numbers(self, string):
-        while string[-1] in "0123456789":
-            for num in "0123456789":
-                string = string.strip(num)
-        return string

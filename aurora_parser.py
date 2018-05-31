@@ -3,33 +3,44 @@
 from aurora_lexer import AuroraLexer
 
 class AuroraParser:
+    # initialization of the Parser.
     def __init__(self, code):
+        # takes the same input as the lexer, because it is lexered in this class
         self._lexer = AuroraLexer(code)
+        # default values
         self.parsed_code = {"body": [], "initialized": {"all": [], "import": [], "defined": [], "required": []}}
         self.token_index = 0
         self._parse()
 
+    # the accept function, tests for a token id at a token index
     def _accept(self, token_id, token_index):
+        # this makes comparisons a lot shorter to type, and helps with error handlering a little
+        # if the token index is more than the length of the tokenized code then it's false
         if token_index >= len(self._lexer.tokenized_code):
             return False
+        # otherwise, if the token id at the index of the token index of the tokenized code is equal to the token id then true
         if self._lexer.tokenized_code[token_index][0] == token_id:
             return True
         return False
 
+    # the accept function, tests for a token id at a token index for a certain depth
     def _expect(self, token_id, max_depth, token_index):
         index = 0
-        while index < max_depth or max_depth == -1 or index >= len(self._lexer.tokenized_code):
-            if self.token_index + index >= len(self._lexer.tokenized_code):
-                break
+        # while the index is less than the max depth, or if the max depth is 1, and the index is less than the length of the tokenized code
+        while index < max_depth or max_depth == -1 and index < len(self._lexer.tokenized_code):
+            # just like accept, if the character at the index of the tokenized code is equal to the token id then true
             if self._lexer.tokenized_code[token_index+index][0] == token_id:
                 return True
-            index += 1
+            index += 1      # increment the index by one
+        # if any of the while loop conditions failed then it's false
         return False
 
+    # the add variable adds to the initialized dictionary of the parsed code
     def _add_variable(self, var, section):
         if var not in self.parsed_code["initialized"][section]:
             self.parsed_code["initialized"][section].append(var)
 
+    # the statment function, takes a token index for an input, and returns a token in a AST format used for beginings of statments
     def _statement(self, token_index):
         if self._accept("COMMENT", token_index):
             if self._accept("ID", token_index+1):
@@ -78,6 +89,7 @@ class AuroraParser:
                 return self._create_new_token("function", id, arguments)
         return False
 
+    # the expression function, input of a token index, output of a token in AST format, used for strings, numbers, and ids
     def _expression(self, token_index):
         if self._accept("STRING_DEF", token_index):
             if self._expect("END_STRING_DEF", 2, token_index+1):
@@ -103,13 +115,18 @@ class AuroraParser:
             return self._create_new_token("id", id)
         return False
 
+    # the create new token funciton, input of a type, value, and children tokens, and output of token (dictionary)
     def _create_new_token(self, type, value="", children=[]):
         new_token = {"token_type": type, "token_value": value, "children": children}
         return new_token
 
+    # parse the code
     def _parse(self):
+        # while the current token index is less than the length of the tokenized code
         while self.token_index < len(self._lexer.tokenized_code):
+            # create a statment at that index
             statement = self._statement(self.token_index)
-            if statement != False:
+            if statement != False: # if it's not false, then add it to the parsed code body
                 self.parsed_code["body"].append(statement)
+            # and increment the token index by one
             self.token_index += 1
