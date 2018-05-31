@@ -21,11 +21,16 @@ Items in *italics* are planned.
 Aurora compiler can be run using:
 
 ```
-python main.py [filename]
+python compiler.py [filename] [optional flags]
 ```
 
 `[filename]` is optional, and replaced by whichever file you want to compile.
-The `.aurora` file will be compiled to a `.py` Python file.
+The `.aurora` file will be compiled to a `.py` Python file. The `-r` or `--run` flags are optional, and run the compiled program after compiling
+To run a compiled Aurora, `.py` file, use:
+
+```
+python run.py [filename]
+```
 
 More can be found with the [aurora compiler documentation][2] on [Read the Docs][3].
 
@@ -36,6 +41,8 @@ Python is needed and can be found at their website, [Python.org][1].
 ## Built With
 
 * [Python][1] - Development language
+* [Read the Docs][3] - Documentation (using Sphinx framework)
+* [A Brain][4] - Some programmers brain, this stuff doesn't just grow on trees.
 
 ## Contributing
 
@@ -58,3 +65,4 @@ This project is licensed under the GNU General Public License v3.0, see the [LIC
 [1]: https://www.python.org
 [2]: http://auroracompiler.readthedocs.io/en/latest
 [3]: https://readthedocs.org
+[4]: https://github.com/PrestonHager
