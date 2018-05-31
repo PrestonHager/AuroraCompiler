@@ -14,7 +14,7 @@ Items in *italics* are planned.
 * **Parser**
 * **Generator**
 * *Syntax*
-* Includes
+* **Includes**
 
 ## Getting Started
 
