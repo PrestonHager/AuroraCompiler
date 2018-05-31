@@ -12,7 +12,7 @@ Items in *italics* are planned.
 
 * **Lexer**
 * **Parser**
-* *Generator*
+* **Generator**
 * *Syntax*
 * Includes
 
