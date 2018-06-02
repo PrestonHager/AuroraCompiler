@@ -42,7 +42,7 @@ Python is needed and can be found at their website, [Python.org][1].
 
 * [Python][1] - Development language
 * [Read the Docs][3] - Documentation (using Sphinx framework)
-* [A Brain][4] - Some programmers brain, this stuff doesn't just grow on trees.
+* [A Brain][4] - Some programmer's brain, code doesn't just grow on trees.
 
 ## Contributing
 
