@@ -20,6 +20,7 @@ FUNC_TYPE:=func
 COMPARE_EQUALS:=?=
 COMMENT:=//
 END:=end
+OBJ:=.
 
 NUMBER=:[0-9]
 VARIABLE=:_[A-Z][a-z]

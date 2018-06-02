@@ -49,7 +49,14 @@ class AuroraGenerator:
             elif token["token_type"] == "number": # if the token type is a number, then the Python code is the same as the value
                 generated_code += ",{number}".format(number=token["token_value"])
             elif token["token_type"] == "variable": # if the token type is a variable, then the Python code is the same as the value
-                generated_code += ",{varaible}.get()".format(varaible=token["token_value"])
+                if len(token["children"]) > 0:
+                    generated_code += ",{variable}.{function}({arguments})".format(variable=token["token_value"], function=token["children"][0]["token_value"], arguments=self._generate_arguments(token["children"][1:]))
+                else:
+                    generated_code += ",{varaible}.get()".format(varaible=token["token_value"])
             elif token["token_type"] == "function": # if the token type is a funciton, then the Python code is `func(arguments)`
-                generated_code += ",{variable}.{function_name}({child_variable})".format(variable=token["token_value"], function_name=token["children"][0]["token_value"], child_variable=self._generate_arguments(token["children"][1:]))
+                function_name = token["token_value"]
+                if function_name in self._parser.parsed_code["initialized"]["defined"]:
+                    generated_code += ",{function_name}({child_variable})".format(function_name=function_name, child_variable=self._generate_arguments(token["children"]))
+                else:
+                    generated_code += ",_aurora_{function_name}({child_variable})".format(function_name=function_name, child_variable=self._generate_arguments(token["children"]))
         return generated_code.strip(",")

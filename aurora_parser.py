@@ -106,8 +106,8 @@ class AuroraParser:
                         arguments.append(arg)
                         if arg["token_type"] == "string":
                             arg_used_index += 3
-                        elif arg["token_type"] == "varaible":
-                            arg_used_index += 1 + len(arg["children"])*2 # the used indexs so far
+                        elif arg["token_type"] == "variable":
+                            arg_used_index += 1 + self._len_children(arg)*2 # the used indexs so far
                         else:
                             arg_used_index += 1
                     else: # if the argument is false, then break from loop
@@ -135,15 +135,23 @@ class AuroraParser:
             # find function call varaibles: `var>arguemnts`, VARIABLE + FUNC + (EXPRESSIONS(s))
             if self._expect("FUNC", 1, token_index+1):
                 arguments = []
-                arg_num = 1
+                arg_index = 0
                 while True:
-                    arg = self._expression(token_index + arg_num*2)
+                    arg = self._expression(token_index + 2 + arg_index)
                     if arg != False:
                         arguments.append(arg)
-                        arg_num += 1
+                        if arg["token_type"] == "string":
+                            arg_index += 3
+                        elif arg["token_type"] == "variable":
+                            arg_index += 1 + self._len_children(arg)*2
+                        else:
+                            arg_index += 1
                     else:
                         break
                 return self._create_new_token("function", variable, arguments)
+            elif self._expect("OBJ", 1, token_index+1):
+                id = self._expression(token_index + 2)
+                return self._create_new_token("variable", variable, [id])
             else:
                 return self._create_new_token("variable", variable)
         # if none of the above, but still an id, return that id
@@ -156,6 +164,12 @@ class AuroraParser:
     def _create_new_token(self, type, value="", children=[]):
         new_token = {"token_type": type, "token_value": value, "children": children}
         return new_token
+
+    def _len_children(self, token):
+        count = len(token["children"])
+        for child in token["children"]:
+            count += self._len_children(child)
+        return count
 
     # parse the code
     def _parse(self):
