@@ -2,7 +2,7 @@
 
 include>io;
 
-println>"Variable Tests", "Hi";
+println>"Variable", " Tests";
 
 // Define a variable.
 String: greeting = "Hello!";

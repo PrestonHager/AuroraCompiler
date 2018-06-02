@@ -104,7 +104,7 @@ class AuroraLexer:
                         self.tokenized_code.append(["ID", current_id, copy(position)])
                         current_id = ""
                     # add the operation token to the tokenized_code
-                    self.tokenized_code.append([key, operation, copy(position)])
+                    self.tokenized_code.append([self.strip_numbers(key), operation.strip(), copy(position)])
                     # adjust the index and position variables
                     index += len(operation)-1
                     position[0] += len(operation)-1
@@ -138,3 +138,9 @@ class AuroraLexer:
         # if not, then the current_id might still be, so add that
         elif current_id != "":
             self.tokenized_code.append(["ID", current_id, copy(position)])
+
+    def strip_numbers(self, string):
+        while string[-1].isdigit():
+            for n in "0123456789":
+                string = string.strip(n)
+        return string
