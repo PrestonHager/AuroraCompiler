@@ -1,5 +1,9 @@
 // Example file for Aurora
 
+// imports are called includes.
+// to print, first we must include the io library.
+include>io;
+
 // comments start with a double slash.
 // all commands end with a semi colon.
 

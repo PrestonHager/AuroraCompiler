@@ -1,0 +1,8 @@
+// Testing the Aurora Math Library
+
+include>io;
+
+func: greet>name::String => Void;
+  print>"Hello, ";
+  println>name;
+end;
