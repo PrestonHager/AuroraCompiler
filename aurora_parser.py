@@ -66,7 +66,7 @@ class AuroraParser:
                     if self._expect("VALUE", 1, token_index+3):
                         variable_value = self._expression(token_index+4)
                         used_index = 5
-                        created_token = self._create_new_token("string_variable", id, [variable_value])
+                        created_token = self._create_new_token("string_variable", id, [variable_value[1]])
                     # otherwise, it's not preset, and just initialized with a void value
                     else:
                         used_index = 3
@@ -85,7 +85,7 @@ class AuroraParser:
                     if self._expect("VALUE", 1, token_index+3):
                         variable_value = self._expression(token_index+4)
                         used_index = 5
-                        created_token = self._create_new_token("number_variable", id, [variable_value])
+                        created_token = self._create_new_token("number_variable", id, [variable_value[1]])
                     # otherwise return a created token with no preset variable value
                     else:
                         used_index = 3
@@ -98,78 +98,129 @@ class AuroraParser:
             # if a FUNC token, `>`, is found then create a token with children of the following expressions (arguments)
             if self._expect("FUNC", 1, token_index+1):
                 self._add_variable(id, "import")
-                arguments = [] # set argument finding variables to "empty"
-                arg_used_index = 0
-                while True: # while infinite, a not found argument will break the loop
-                    arg = self._expression(token_index + 2 + arg_used_index) # get the next expression (skip over commas)
-                    if arg != False:
-                        arguments.append(arg)
-                        if arg["token_type"] == "string":
-                            arg_used_index += 3
-                        elif arg["token_type"] == "variable":
-                            arg_used_index += 1 + self._len_children(arg)*2 # the used indexs so far
-                        else:
+                arguments = [] # set the list (children) of arguments to "empty"
+                # get the first argument, as it doesn't require a comma before
+                arg = self._expression(token_index + 2)
+                if arg[1] != False: # if the argument isn't false,
+                    arguments.append(arg[1]) # append the argument to the list
+                    arg_used_index = arg[0] # and make the used index equal the used index from the expression
+                    while True: # while infinite, a not found argument will break the loop
+                        if self._accept("ARGUMENT_SEPERATOR", token_index + 2 + arg_used_index):
                             arg_used_index += 1
-                    else: # if the argument is false, then break from loop
-                        break
-                # set the class token index so the parser doesn't accidently parse an already parsed part
-                used_index = 2 + arg_used_index
-                created_token = self._create_new_token("function", id, arguments) # return the created token
+                            arg = self._expression(token_index + 2 + arg_used_index) # get the next expression (skip over commas)
+                            if arg[1] != False:
+                                arguments.append(arg[1])
+                                arg_used_index += arg[0]
+                            else: # if the argument is false, then break from loop
+                                break
+                        else:
+                            break
+                    # make sure the used index is set
+                    used_index = 2 + arg_used_index
+                    created_token = self._create_new_token("function", id, arguments) # return the created token
+            else:
+                created_token = self._create_new_token("variable", id)
         # return the created_token and used_index
         return [used_index, created_token]
 
     # the expression function, input of a token index, output of a token in AST format, used for strings, numbers, and ids
     def _expression(self, token_index):
+        used_index = 1
+        created_token = False
+        # find negivite numbers: `-15`, MINUS + NUMBER
+        if self._accept("MINUS", token_index):
+            if self._accept("NUMBER", token_index+1):
+                number = self._lexer.tokenized_code[token_index+1][1]
+                if self._accept("PLUS", token_index+2):
+                    number2 = self._expression(token_index+3)
+                    used_index = 2 + number2[0]
+                    created_token = self._create_new_token("plus", number, [number2[1]])
+                elif self._accept("MINUS", token_index+2):
+                    number2 = self._expression(token_index+3)
+                    used_index = 2 + number2[0]
+                    created_token = self._create_new_token("subtract", number, [number2[1]])
+                elif self._accept("MULTIPLY", token_index+2):
+                    number2 = self._expression(token_index+3)
+                    used_index = 2 + number2[0]
+                    created_token = self._create_new_token("multiply", number, [number2[1]])
+                elif self._accept("DIVIDE", token_index+2):
+                    number2 = self._expression(token_index+3)
+                    used_index = 2 + number2[0]
+                    created_token = self._create_new_token("divide", number, [number2[1]])
+                else:
+                    used_index = 2
+                    created_token = self._create_new_token("number", "-"+number)
         # find strings: `"string value"`, STRING_DEF + ID + END_STRING_DEF
-        if self._accept("STRING_DEF", token_index):
+        elif self._accept("STRING_DEF", token_index):
             if self._expect("END_STRING_DEF", 2, token_index+1):
                 id = self._lexer.tokenized_code[token_index+1][1]
-                return self._create_new_token("string", id) # return created token
+                used_index = 3
+                created_token = self._create_new_token("string", id) # return created token
         # find numbers: `15`, NUMBER
-        if self._accept("NUMBER", token_index):
+        elif self._accept("NUMBER", token_index):
             number = self._lexer.tokenized_code[token_index][1]
-            return self._create_new_token("number", number) # return the found token value as an AST token
+            if self._accept("PLUS", token_index+1):
+                number2 = self._expression(token_index+2)
+                used_index = 2 + number2[0]
+                created_token = self._create_new_token("plus", number, [number2[1]])
+            elif self._accept("MINUS", token_index+1):
+                number2 = self._expression(token_index+2)
+                used_index = 2 + number2[0]
+                created_token = self._create_new_token("subtract", number, [number2[1]])
+            elif self._accept("MULTIPLY", token_index+1):
+                number2 = self._expression(token_index+2)
+                used_index = 2 + number2[0]
+                created_token = self._create_new_token("multiply", number, [number2[1]])
+            elif self._accept("DIVIDE", token_index+1):
+                number2 = self._expression(token_index+2)
+                used_index = 2 + number2[0]
+                created_token = self._create_new_token("divide", number, [number2[1]])
+            else:
+                used_index = 1
+                created_token = self._create_new_token("number", number) # return the found token value as an AST token
         # find varaibles, and function call varaibles
-        if self._accept("VARIABLE", token_index):
+        elif self._accept("VARIABLE", token_index):
             variable = self._lexer.tokenized_code[token_index][1]
             # find function call varaibles: `var>arguemnts`, VARIABLE + FUNC + (EXPRESSIONS(s))
             if self._expect("FUNC", 1, token_index+1):
-                arguments = []
-                arg_index = 0
-                while True:
-                    arg = self._expression(token_index + 2 + arg_index)
-                    if arg != False:
-                        arguments.append(arg)
-                        if arg["token_type"] == "string":
-                            arg_index += 3
-                        elif arg["token_type"] == "variable":
-                            arg_index += 1 + self._len_children(arg)*2
+                arguments = [] # set the list (children) of arguments to "empty"
+                # get the first argument, as it doesn't require a comma before
+                arg = self._expression(token_index + 2)
+                if arg[1] != False: # if the argument isn't false,
+                    arguments.append(arg[1]) # append the argument to the list
+                    arg_used_index = arg[0] # and make the used index equal the used index from the expression
+                    while True: # while infinite, a not found argument will break the loop
+                        if self._accept("ARGUMENT_SEPERATOR", token_index + 2 + arg_used_index):
+                            arg_used_index += 1
+                            arg = self._expression(token_index + 2 + arg_used_index) # get the next expression (skip over commas)
+                            if arg[1] != False:
+                                arguments.append(arg[1])
+                                arg_used_index += arg[0]
+                            else: # if the argument is false, then break from loop
+                                break
                         else:
-                            arg_index += 1
-                    else:
-                        break
-                return self._create_new_token("function", variable, arguments)
+                            break
+                    # make sure the used index is set
+                    used_index = 2 + arg_used_index
+                created_token = self._create_new_token("function", variable, arguments)
             elif self._expect("OBJ", 1, token_index+1):
                 id = self._expression(token_index + 2)
-                return self._create_new_token("variable", variable, [id])
+                used_index = 2 + id[0]
+                created_token = self._create_new_token("variable", variable, [id[1]])
             else:
-                return self._create_new_token("variable", variable)
+                used_index = 1
+                created_token = self._create_new_token("variable", variable)
         # if none of the above, but still an id, return that id
-        if self._accept("ID", token_index):
+        elif self._accept("ID", token_index):
             id = self._lexer.tokenized_code[token_index][1]
-            return self._create_new_token("id", id)
-        return False
+            used_index = 1
+            created_token = self._create_new_token("id", id)
+        return (used_index, created_token)
 
     # the create new token funciton, input of a type, value, and children tokens, and output of token (dictionary)
     def _create_new_token(self, type, value="", children=[]):
         new_token = {"token_type": type, "token_value": value, "children": children}
         return new_token
-
-    def _len_children(self, token):
-        count = len(token["children"])
-        for child in token["children"]:
-            count += self._len_children(child)
-        return count
 
     # parse the code
     def _parse(self):

@@ -3,6 +3,25 @@
 include>math;
 include>io;
 
+println>"Testing builtin math";
+
+// Test to see if 1 + 1 = 2
+Number: two = 1 + 1;
+print>"1 + 1 = ";
+println>two.string>;
+// Test to see if 15 - 9 = 6
+Number: six = 15 - 9;
+print>"15 - 9 = ";
+println>six.string>;
+// Test to see if 5 * 12 = 60
+Number: sixty = 5 * 12;
+print>"5 * 12 = ";
+println>sixty.string;
+// Test to see if 100 / 25 = 4
+Number: quarter = 100 / 25;
+print>"100 / 25 = ";
+println>quarter.string;
+
 println>"Testing Math Library";
 
 // Check to see if 7 + 8 = 15
@@ -14,3 +33,26 @@ println>age.string>;
 Number: twelve = mul>3, 4;
 print>"4 * 3 = ";
 println>twelve.string>;
+
+// Check to see if 2 ^ 4 = 16
+Number: power_two = pow>2, 4;
+print>"2 ^ 4 = ";
+println>power_two.string>;
+
+// Check to see if 0 - 24 = -24
+Number: negitive_twenty_four = sub>0, 24;
+print>"0 - 24 = ";
+println>negitive_twenty_four.string;
+
+// Check to see if 1 / 2 = 0.5
+Number: half = div>1, 2;
+print>"1 / 2 = ";
+println>half.string>;
+
+// Check to see if |-52| = 52 = |52|
+Number: negitive_abs = abs>-52;
+Number: positive_abs = abs>52;
+print>"|-52| = ";
+println>negitive_abs.string>;
+print>"|52| = ";
+println>positive_abs.string>;
