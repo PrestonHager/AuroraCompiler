@@ -1,11 +1,11 @@
 from _aurora.vars import *
 #  Testing Variable Definition
 from _aurora.io import *
-_aurora_println("Variable"," Tests")
+_aurora_println(_aurora_var_string("Variable"),_aurora_var_string(" Tests"))
 #  Define a variable.
 greeting = _aurora_var_string("Hello!")
 #  and print it out.
-_aurora_println(greeting.get())
+_aurora_println(greeting)
 #  Now for the numbers.
 age = _aurora_var_number(15)
 #  and see if it prints.

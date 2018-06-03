@@ -2,7 +2,14 @@
 
 include>io;
 
+// Debug print
+println>"Debug...!";
+
+// Define greet function
 func: greet>name::String => Void;
   print>"Hello, ";
   println>name;
 end;
+
+// Greet the person, Pi
+greet>"Pi";

@@ -25,7 +25,7 @@ class AuroraParser:
         return False
 
     # the accept function, tests for a token id at a token index for a certain depth
-    def _expect(self, token_id, max_depth, token_index):
+    def _expect(self, token_id, max_depth, token_index, msg=""):
         index = 0
         # while the index is less than the max depth, or if the max depth is 1, and the index is less than the length of the tokenized code
         while index < max_depth or max_depth == -1 and index < len(self._lexer.tokenized_code):
@@ -34,6 +34,8 @@ class AuroraParser:
                 return True
             index += 1      # increment the index by one
         # if any of the while loop conditions failed then it's false
+        # if it is false, then there is a syntax error.
+        raise SyntaxError(msg+" At {position} from {area}".format(position=', '.join([str(p) for p in self._lexer.tokenized_code[token_index][2]]), area=''.join([t[1] for t in self._lexer.tokenized_code[token_index-2:token_index+1]])))
         return False
 
     # the add variable adds to the initialized dictionary of the parsed code
@@ -52,18 +54,72 @@ class AuroraParser:
                 id = self._lexer.tokenized_code[token_index+1][1]
                 used_index = 2
                 created_token = self._create_new_token("comment", id)
+        # look for funciton definitions
+        elif self._accept("FUNC_TYPE", token_index):
+            if self._expect("ASIGN", 1, token_index+1, "Expected ':' after function decleration."):
+                if self._expect("VARIABLE", 1, token_index+2, "Expected varaible after function decleration."):
+                    id = self._lexer.tokenized_code[token_index+2][1]
+                    self._add_variable(id, "all")
+                    self._add_variable(id, "defined")
+                    if self._expect("FUNC", 1, token_index+3, "Expected '>' after function name."):
+                        arguments = []
+                        arg_used_index = 0
+                        while True:
+                            if self._accept("VARIABLE", token_index+4+arg_used_index):
+                                variable = self._lexer.tokenized_code[token_index+4+arg_used_index][1]
+                                if self._expect("TYPE", 1, token_index+4+arg_used_index+1, "Expected '::' after variable decleration in function arguments."):
+                                    if self._accept("STRING_TYPE", token_index+4+arg_used_index+2):
+                                        if self._accept("VALUE", token_index+4+arg_used_index+3):
+                                            value = self._expression(token_index+4+arg_used_index+3)
+                                            arg_used_index += 4 + value[0]
+                                            arguments.append(self._create_new_token("string_variable", variable, [value[1]]))
+                                        else:
+                                            arg_used_index += 4
+                                            arguments.append(self._create_new_token("string_variable", variable))
+                                    elif self._accept("NUMBER_TYPE", token_index+4+arg_used_index+2):
+                                        if self._accpet("VALUE", token_index+4+arg_used_index+3):
+                                            value = self._expression(token_index+4+arg_used_index+3)
+                                            arg_used_index += 4 + value[0]
+                                            arguments.append(self._create_new_token("number_variable", variable, [value[1]]))
+                                        else:
+                                            arg_used_index += 4
+                                            arguments.append(self._create_new_token("number_variable", variable))
+                            else:
+                                break
+                        if self._expect("RETURN_TYPE", 1, token_index+3+arg_used_index, "Expected '=>' after function argument list."):
+                            if self._accept("STRING_TYPE", token_index+3+arg_used_index+1):
+                                return_type = "string"
+                            elif self._accept("NUMBER_TYPE", token_index+3+arg_used_index+1):
+                                return_type = "number"
+                            elif self._accept("VOID_TYPE", token_index+3+arg_used_index+1):
+                                return_type = "void"
+                            else:
+                                self._expect("", 0, token_index+3+arg_used_index+1, "Expected return type after function decleration.")
+                            inner_code = []
+                            statement = self._statement(token_index+3+arg_used_index+2)
+                            while True:
+                                if statement[1] != False:
+                                    inner_code.append(statement[1])
+                                arg_used_index += statement[0]
+                                statement = self._statement(token_index+3+arg_used_index+2)
+                                if statement[1] != False and statement[1]["token_type"] == "end":
+                                    break
+                            used_index = 4 + arg_used_index
+                            created_token = self._create_new_token("function_definition", id, [self._create_new_token("arguments", "", arguments), self._create_new_token("return_type", return_type), self._create_new_token("code", "", inner_code)])
+        elif self._accept("END", token_index):
+            created_token = self._create_new_token("end")
         # look for string definitions
         elif self._accept("STRING_TYPE", token_index):
             # format is: `String: var = "value"` or STRING_TYPE + ASIGN + VARIABLE + VALUE + (EXPRESSION)
-            if self._expect("ASIGN", 1, token_index+1):
-                if self._expect("VARIABLE", 1, token_index+2):
+            if self._expect("ASIGN", 1, token_index+1, "Expected ':' after String variable definition."):
+                if self._expect("VARIABLE", 1, token_index+2, "Expected varaible name after String variable definition."):
                     # get the variable name (id) and add it to initalized varaibles
                     id = self._lexer.tokenized_code[token_index+2][1]
                     self._add_variable(id, "all")
                     self._add_variable(id, "defined")
                     self._add_variable("string_variables", "required")
                     # if the variable is preset, then it has a value token
-                    if self._expect("VALUE", 1, token_index+3):
+                    if self._accept("VALUE", token_index+3):
                         variable_value = self._expression(token_index+4)
                         used_index = 5
                         created_token = self._create_new_token("string_variable", id, [variable_value[1]])
@@ -74,15 +130,15 @@ class AuroraParser:
         # look for number definitions
         elif self._accept("NUMBER_TYPE", token_index):
             # similar to string definitions: `Number: var = 15` or NUMBER_TYPE + ASIGN + VARIABLE + VALUE + (EXPRESSION)
-            if self._expect("ASIGN", 1, token_index+1):
-                if self._expect("VARIABLE", 1, token_index+2):
+            if self._expect("ASIGN", 1, token_index+1, "Expected ':' after Number variable definition."):
+                if self._expect("VARIABLE", 1, token_index+2, "Expected variable name after Number variable definition."):
                     # get the variable name (id)
                     id = self._lexer.tokenized_code[token_index+2][1]
                     self._add_variable(id, "all")
                     self._add_variable(id, "defined")
                     self._add_variable("number_variables", "required")
                     # if the variable is set then get the value and return a created token
-                    if self._expect("VALUE", 1, token_index+3):
+                    if self._accept("VALUE", token_index+3):
                         variable_value = self._expression(token_index+4)
                         used_index = 5
                         created_token = self._create_new_token("number_variable", id, [variable_value[1]])
@@ -130,17 +186,20 @@ class AuroraParser:
         # find negivite numbers: `-15`, MINUS + NUMBER
         if self._accept("MINUS", token_index):
             if self._accept("NUMBER", token_index+1):
+                self._add_variable("number_variables", "required")
                 number = self._lexer.tokenized_code[token_index+1][1]
                 used_index = 2
                 created_token = self._create_new_token("number", "-"+number)
         # find strings: `"string value"`, STRING_DEF + ID + END_STRING_DEF
         elif self._accept("STRING_DEF", token_index):
             if self._expect("END_STRING_DEF", 2, token_index+1):
+                self._add_variable("string_variables", "required")
                 id = self._lexer.tokenized_code[token_index+1][1]
                 used_index = 3
                 created_token = self._create_new_token("string", id) # return created token
         # find numbers: `15`, NUMBER
         elif self._accept("NUMBER", token_index):
+            self._add_variable("number_variables", "required")
             number = self._lexer.tokenized_code[token_index][1]
             used_index = 1
             created_token = self._create_new_token("number", number) # return the found token value as an AST token
@@ -148,7 +207,7 @@ class AuroraParser:
         elif self._accept("VARIABLE", token_index):
             variable = self._lexer.tokenized_code[token_index][1]
             # find function call varaibles: `var>arguemnts`, VARIABLE + FUNC + (EXPRESSIONS(s))
-            if self._expect("FUNC", 1, token_index+1):
+            if self._accept("FUNC", token_index+1):
                 arguments = [] # set the list (children) of arguments to "empty"
                 # get the first argument, as it doesn't require a comma before
                 arg = self._expression(token_index + 2)
@@ -169,7 +228,7 @@ class AuroraParser:
                     # make sure the used index is set
                     used_index = 2 + arg_used_index
                 created_token = self._create_new_token("function", variable, arguments)
-            elif self._expect("OBJ", 1, token_index+1):
+            elif self._accept("OBJ", token_index+1):
                 id = self._expression(token_index + 2)
                 used_index = 2 + id[0]
                 created_token = self._create_new_token("variable", variable, [id[1]])
