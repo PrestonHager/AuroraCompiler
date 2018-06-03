@@ -20,9 +20,9 @@ quarter = _aurora_var_number(100/25)
 _aurora_print("100 / 25 = ")
 _aurora_println(quarter.string())
 _aurora_println("Testing Math Library")
-#  Check to see if 7 + 8 = 15
-age = _aurora_var_number(_aurora_add(7,8))
-_aurora_print("7 + 8 = ")
+#  Check to see if 7+2 + 8 = 17
+age = _aurora_var_number(_aurora_add(7+2,8))
+_aurora_print("7+2 + 8 = ")
 _aurora_println(age.string())
 #  Check to see if 4 * 3 = 12
 twelve = _aurora_var_number(_aurora_mul(3,4))

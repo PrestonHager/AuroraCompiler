@@ -131,25 +131,8 @@ class AuroraParser:
         if self._accept("MINUS", token_index):
             if self._accept("NUMBER", token_index+1):
                 number = self._lexer.tokenized_code[token_index+1][1]
-                if self._accept("PLUS", token_index+2):
-                    number2 = self._expression(token_index+3)
-                    used_index = 2 + number2[0]
-                    created_token = self._create_new_token("plus", number, [number2[1]])
-                elif self._accept("MINUS", token_index+2):
-                    number2 = self._expression(token_index+3)
-                    used_index = 2 + number2[0]
-                    created_token = self._create_new_token("subtract", number, [number2[1]])
-                elif self._accept("MULTIPLY", token_index+2):
-                    number2 = self._expression(token_index+3)
-                    used_index = 2 + number2[0]
-                    created_token = self._create_new_token("multiply", number, [number2[1]])
-                elif self._accept("DIVIDE", token_index+2):
-                    number2 = self._expression(token_index+3)
-                    used_index = 2 + number2[0]
-                    created_token = self._create_new_token("divide", number, [number2[1]])
-                else:
-                    used_index = 2
-                    created_token = self._create_new_token("number", "-"+number)
+                used_index = 2
+                created_token = self._create_new_token("number", "-"+number)
         # find strings: `"string value"`, STRING_DEF + ID + END_STRING_DEF
         elif self._accept("STRING_DEF", token_index):
             if self._expect("END_STRING_DEF", 2, token_index+1):
@@ -159,25 +142,8 @@ class AuroraParser:
         # find numbers: `15`, NUMBER
         elif self._accept("NUMBER", token_index):
             number = self._lexer.tokenized_code[token_index][1]
-            if self._accept("PLUS", token_index+1):
-                number2 = self._expression(token_index+2)
-                used_index = 2 + number2[0]
-                created_token = self._create_new_token("plus", number, [number2[1]])
-            elif self._accept("MINUS", token_index+1):
-                number2 = self._expression(token_index+2)
-                used_index = 2 + number2[0]
-                created_token = self._create_new_token("subtract", number, [number2[1]])
-            elif self._accept("MULTIPLY", token_index+1):
-                number2 = self._expression(token_index+2)
-                used_index = 2 + number2[0]
-                created_token = self._create_new_token("multiply", number, [number2[1]])
-            elif self._accept("DIVIDE", token_index+1):
-                number2 = self._expression(token_index+2)
-                used_index = 2 + number2[0]
-                created_token = self._create_new_token("divide", number, [number2[1]])
-            else:
-                used_index = 1
-                created_token = self._create_new_token("number", number) # return the found token value as an AST token
+            used_index = 1
+            created_token = self._create_new_token("number", number) # return the found token value as an AST token
         # find varaibles, and function call varaibles
         elif self._accept("VARIABLE", token_index):
             variable = self._lexer.tokenized_code[token_index][1]
@@ -215,6 +181,22 @@ class AuroraParser:
             id = self._lexer.tokenized_code[token_index][1]
             used_index = 1
             created_token = self._create_new_token("id", id)
+        if self._accept("PLUS", token_index+1):
+            number2 = self._expression(token_index+2)
+            used_index += 1 + number2[0]
+            created_token = self._create_new_token("plus", "+", [created_token, number2[1]])
+        elif self._accept("MINUS", token_index+1):
+            number2 = self._expression(token_index+2)
+            used_index += 1 + number2[0]
+            created_token = self._create_new_token("subtract", "-", [created_token, number2[1]])
+        elif self._accept("MULTIPLY", token_index+1):
+            number2 = self._expression(token_index+2)
+            used_index += 1 + number2[0]
+            created_token = self._create_new_token("multiply", "*", [created_token, number2[1]])
+        elif self._accept("DIVIDE", token_index+1):
+            number2 = self._expression(token_index+2)
+            used_index += 1 + number2[0]
+            created_token = self._create_new_token("divide", "/", [created_token, number2[1]])
         return (used_index, created_token)
 
     # the create new token funciton, input of a type, value, and children tokens, and output of token (dictionary)

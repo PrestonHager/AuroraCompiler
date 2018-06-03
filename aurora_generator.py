@@ -47,13 +47,13 @@ class AuroraGenerator:
             if token["token_type"] == "string": # if the token type is a stirng, then the Python code is `"value"`
                 generated_code += ",\"{string}\"".format(string=token["token_value"])
             elif token["token_type"] == "plus": # if the token type is a plus sign, then the Python code is `num + num2`
-                generated_code += ",{number}+{number2}".format(number=token["token_value"], number2=token["children"][0]["token_value"])
+                generated_code += ",{number}+{number2}".format(number=token["children"][0]["token_value"], number2=token["children"][1]["token_value"])
             elif token["token_type"] == "subtract": # if the token type is a minus sign, then the Python code is `num - num2`
-                generated_code += ",{number}-{number2}".format(number=token["token_value"], number2=token["children"][0]["token_value"])
+                generated_code += ",{number}-{number2}".format(number=token["children"][0]["token_value"], number2=token["children"][1]["token_value"])
             elif token["token_type"] == "multiply": # if the token type is a multiply sign, then the Python code is `num * num2`
-                generated_code += ",{number}*{number2}".format(number=token["token_value"], number2=token["children"][0]["token_value"])
+                generated_code += ",{number}*{number2}".format(number=token["children"][0]["token_value"], number2=token["children"][1]["token_value"])
             elif token["token_type"] == "divide": # if the token type is a divide sign, then the Python code is `num / num2`
-                generated_code += ",{number}/{number2}".format(number=token["token_value"], number2=token["children"][0]["token_value"])
+                generated_code += ",{number}/{number2}".format(number=token["children"][0]["token_value"], number2=token["children"][1]["token_value"])
             elif token["token_type"] == "number": # if the token type is a number, then the Python code is the same as the value
                 generated_code += ",{number}".format(number=token["token_value"])
             elif token["token_type"] == "variable": # if the token type is a variable, then the Python code is the same as the value

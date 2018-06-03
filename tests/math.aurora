@@ -24,9 +24,9 @@ println>quarter.string;
 
 println>"Testing Math Library";
 
-// Check to see if 7 + 8 = 15
-Number: age = add>7, 8;
-print>"7 + 8 = ";
+// Check to see if 7+2 + 8 = 17
+Number: age = add>7+2, 8;
+print>"7+2 + 8 = ";
 println>age.string>;
 
 // Check to see if 4 * 3 = 12
