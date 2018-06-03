@@ -15,7 +15,6 @@ def main():
             generator = AuroraGenerator(f_in.read())
             with open(sys.argv[1].strip(".aurora") + ".py", 'w') as f_out:
                 f_out.write(generator.generated_code)
-            print(generator._parser.parsed_code)
             if "-r" in sys.argv or "--run" in sys.argv:
                 try:
                     exec(generator.generated_code)
