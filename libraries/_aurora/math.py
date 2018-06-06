@@ -1,7 +1,7 @@
 # Aurora Math library
 
 import math
-from libraries._aurora.vars import _aurora_var_number
+from _aurora.vars import _aurora_var_number
 
 class AuroraMath:
     def _aurora_abs(self, num):

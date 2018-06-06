@@ -4,6 +4,7 @@ import sys
 from aurora_generator import *
 import traceback
 import os
+import subprocess
 
 raw_input=input
 def main():
@@ -12,11 +13,13 @@ def main():
     if len(sys.argv) > 1:
         with open(sys.argv[1], 'r') as f_in:
             generator = AuroraGenerator(f_in.read())
-            with open("./build/" + os.path.basename(sys.argv[1]).strip(".aurora") + ".py", 'w') as f_out:
+            print(generator._parser.parsed_code)
+            filename = "./build/" + os.path.basename(sys.argv[1]).strip(".aurora") + ".py"
+            with open(filename, 'w') as f_out:
                 f_out.write(generator.generated_code)
             if "-r" in sys.argv or "--run" in sys.argv:
                 try:
-                    exec(generator.generated_code)
+                    subprocess.call(["python", filename])
                 except:
                     traceback.print_exc()
     else:

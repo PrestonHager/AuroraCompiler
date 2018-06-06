@@ -45,6 +45,8 @@ class AuroraGenerator:
                     generated_code += "{indent}{variable} = {number}\n".format(indent=indent, variable=token["token_value"], number=self._generate_arguments(token["children"]))
                 else: # otherwise, don't
                     generated_code += "{indent}{variable} = _aurora_var_number()\n".format(indent=indent, variable=token["token_value"])
+            elif token["token_type"] == "return": # if the token is return, then the Python code is `return [var]`
+                generated_code += "return {variable}\n".format(variable=self._generate_arguments(token["children"]))
         return generated_code
 
     # generate the arguments for defined functions

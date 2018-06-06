@@ -28,7 +28,8 @@ class AuroraParser:
     def _expect(self, token_id, max_depth, token_index, msg=""):
         index = 0
         # while the index is less than the max depth, or if the max depth is 1, and the index is less than the length of the tokenized code
-        while index < max_depth or max_depth == -1 and index < len(self._lexer.tokenized_code):
+        while (index < max_depth or max_depth == -1) and index < len(self._lexer.tokenized_code):
+            print(self._lexer.tokenized_code)
             # just like accept, if the character at the index of the tokenized code is equal to the token id then true
             if self._lexer.tokenized_code[token_index+index][0] == token_id:
                 return True
@@ -62,6 +63,8 @@ class AuroraParser:
                     self._add_variable(id, "all")
                     self._add_variable(id, "defined")
                     if self._expect("FUNC", 1, token_index+3, "Expected '>' after function name."):
+                        # check for an end tag after function decleration
+                        self._expect("END", -1, token_index+2, "Expected 'end' tag after function decleration.")
                         arguments = []
                         arg_used_index = 0
                         while True:
@@ -235,6 +238,11 @@ class AuroraParser:
             else:
                 used_index = 1
                 created_token = self._create_new_token("variable", variable)
+        # find return statement
+        elif self._accept("RETURN", token_index):
+            id = self._statement(token_index+1)
+            used_index = 1 + id[0]
+            created_token = self._create_new_token("return", "return", [id[1]])
         # if none of the above, but still an id, return that id
         elif self._accept("ID", token_index):
             id = self._lexer.tokenized_code[token_index][1]

@@ -9,7 +9,7 @@ println>"Debug...!";
 func: greet>name::String => Void;
   print>"Hello, ";
   println>name;
-end;
+  return Void;
 
 // Greet the person, Pi
 greet>"Pi";

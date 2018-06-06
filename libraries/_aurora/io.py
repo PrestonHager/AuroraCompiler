@@ -1,7 +1,7 @@
 # Aurora I/O library
 
 from sys import stdout, stdin
-from libraries._aurora.vars import _aurora_var_string
+from _aurora.vars import _aurora_var_string
 
 class AuroraIO:
     def _aurora_print(self, *args):
