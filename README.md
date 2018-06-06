@@ -14,7 +14,14 @@ Items in *italics* are planned.
 * **Parser**
 * **Generator**
 * *Syntax*
-* **Includes**
+  * **Function Calls**
+  * **Includes**
+  * **Builtin Libraries**
+  * **Math Operations**
+  * Function Definitions
+  * *Lists*
+* *Error Handling*
+* *Strong Variable Typing*
 
 ## Getting Started
 
@@ -25,11 +32,12 @@ python compiler.py [filename] [optional flags]
 ```
 
 `[filename]` is optional, and replaced by whichever file you want to compile.
-The `.aurora` file will be compiled to a `.py` Python file. The `-r` or `--run` flags are optional, and run the compiled program after compiling
+The `.aurora` file will be compiled to a `.py` Python file.
+The `-r` or `--run` flags are optional, and run the compiled program after compiling
 To run a compiled Aurora, `.py` file, use:
 
 ```
-python run.py [filename]
+python [filename]
 ```
 
 More can be found with the [aurora compiler documentation][2] on [Read the Docs][3].

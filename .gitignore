@@ -17,3 +17,6 @@ pip-delete-this-directory.txt
 # Sphinx documentation
 docs/_build/*
 docs/build/*
+
+# Compiler build directory
+build/*

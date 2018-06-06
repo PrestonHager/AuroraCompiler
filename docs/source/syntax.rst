@@ -72,7 +72,7 @@ taking no arguments.
 
 .. code::
 
-    func: fooBar> => Number
+    func: fooBar> => Number;
         return 32;
     end;
 

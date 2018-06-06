@@ -3,14 +3,16 @@
 import sys
 from aurora_generator import *
 import traceback
-import os.path
+import os
 
 raw_input=input
 def main():
+    if not os.path.exists("./build/"):
+        os.makedirs("./build/")
     if len(sys.argv) > 1:
         with open(sys.argv[1], 'r') as f_in:
             generator = AuroraGenerator(f_in.read())
-            with open(sys.argv[1].strip(".aurora") + ".py", 'w') as f_out:
+            with open("./build/" + os.path.basename(sys.argv[1]).strip(".aurora") + ".py", 'w') as f_out:
                 f_out.write(generator.generated_code)
             if "-r" in sys.argv or "--run" in sys.argv:
                 try:
