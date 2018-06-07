@@ -28,8 +28,7 @@ class AuroraParser:
     def _expect(self, token_id, max_depth, token_index, msg=""):
         index = 0
         # while the index is less than the max depth, or if the max depth is 1, and the index is less than the length of the tokenized code
-        while (index < max_depth or max_depth == -1) and index < len(self._lexer.tokenized_code):
-            print(self._lexer.tokenized_code)
+        while (index < max_depth or max_depth == -1) and token_index+index < len(self._lexer.tokenized_code):
             # just like accept, if the character at the index of the tokenized code is equal to the token id then true
             if self._lexer.tokenized_code[token_index+index][0] == token_id:
                 return True

@@ -10,6 +10,7 @@ func: greet>name::String => Void;
   print>"Hello, ";
   println>name;
   return Void;
+end;
 
 // Greet the person, Pi
 greet>"Pi";
