@@ -21,6 +21,6 @@ Contents
 .. _Lexer: http://auroracompiler.rtfd.io/en/latest/lexer.html
 .. _Parser: http://auroracompiler.rtfd.io/en/latest/parser.html
 .. _Generator: http://auroracompiler.rtfd.io/en/latest/generator.html
-.. _Subset: http://auroracompiler.rtfd.io/en/latest/subset0.html
+.. _Subset: http://auroracompiler.rtfd.io/en/latest/subset1.html
 .. _Syntax: http://auroracompiler.rtfd.io/en/latest/syntax.html
 .. _Libraries: http://auraracompiler.rtfd.io/en/latest/libraries.html

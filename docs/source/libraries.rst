@@ -15,8 +15,8 @@ The following is a list of predefined libraries, their purpose, and
 short list of their functions. More for each library can be found in
 their documentation.
 
-+ I/O Library - used for input and output operations. ``print``, ``println``.
-+ Math Library - used for higher level math operations. ``sqrt``, ``round``, ``pow``, ``fib``, ``abs``.
++ `I/O`_ Library - used for input and output operations. ``print``, ``println``.
++ `Math`_ Library - used for higher level math operations. ``sqrt``, ``round``, ``pow``, ``fib``, ``abs``.
 
 User Libraries
 ~~~~~~~~~~~~~~
@@ -99,3 +99,6 @@ The community can also put together libraries. To install on of these
 download the library and put it in the ``libraries/user`` folder like
 you would if you were creating a library. Then you can use any of those
 functions in your aurora files after including them.
+
+.. _I/O: http://auroracompiler.rtfd.io/en/latest/io_library.html
+.. _Math: http://auroracompiler.rtfd.io/en/latest/math_library.html

@@ -9,6 +9,7 @@ Table of Contents
     lexer
     parser
     generator
-    subset0
+    subset1
+    subset2
     syntax
     libraries
