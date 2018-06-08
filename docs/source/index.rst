@@ -13,3 +13,5 @@ Table of Contents
     subset2
     syntax
     libraries
+    io_library
+    math_library

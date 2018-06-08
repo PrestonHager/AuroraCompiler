@@ -19,7 +19,7 @@ be the ``print`` statement.
 Secondly variable definitions of strings will be possible. This means
 that variables with the content of a string may be defined, and called
 upon. For example if the variable ``String: hello = "Salutations to you!";``
-may be defined and then later called with ``println(hello);``. This will
+may be defined and then later called with ``println>hello;``. This will
 in turn print the line ``Salutations to you!`` with a newline at the end.
 
 There will also be three predefined functions that may be called. The
