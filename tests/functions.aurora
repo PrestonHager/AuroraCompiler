@@ -2,9 +2,6 @@
 
 include>io;
 
-// Debug print
-println>"Debug...!";
-
 // Define greet function
 func: greet>name::String => Void;
   print>"Hello, ";

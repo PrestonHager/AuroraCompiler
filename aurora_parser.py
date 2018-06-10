@@ -232,11 +232,15 @@ class AuroraParser:
                 created_token = self._create_new_token("function", variable, arguments)
             elif self._accept("OBJ", token_index+1):
                 id = self._expression(token_index + 2)
-                used_index = 2 + id[0]
+                used_index = 3 + id[0]
                 created_token = self._create_new_token("variable", variable, [id[1]])
             else:
                 used_index = 1
                 created_token = self._create_new_token("variable", variable)
+            # test to see if there is a end function at the end of the function call. if so add one to used_index
+            # this is so that when arguments are added in the function arguments list, the ARGUMENT_SEPERATOR token can be found
+            if self._accept("END_FUNC", token_index + used_index):
+                used_index += 1
         elif self._accept("VOID_TYPE", token_index):
             used_index = 1
             created_token = self._create_new_token("variable", "void")
