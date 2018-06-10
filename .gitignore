@@ -20,3 +20,6 @@ docs/build/*
 
 # Compiler build directory
 build/*
+
+# Test files
+bnf_grammar.txt
