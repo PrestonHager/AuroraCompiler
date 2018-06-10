@@ -237,11 +237,9 @@ class AuroraParser:
             else:
                 used_index = 1
                 created_token = self._create_new_token("variable", variable)
-        # find return statement
-        elif self._accept("RETURN", token_index):
-            id = self._statement(token_index+1)
-            used_index = 1 + id[0]
-            created_token = self._create_new_token("return", "return", [id[1]])
+        elif self._accept("VOID_TYPE", token_index):
+            used_index = 1
+            created_token = self._create_new_token("variable", "void")
         # if none of the above, but still an id, return that id
         elif self._accept("ID", token_index):
             id = self._lexer.tokenized_code[token_index][1]

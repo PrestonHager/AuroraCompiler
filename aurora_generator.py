@@ -24,7 +24,9 @@ class AuroraGenerator:
                 generated_code += "from _aurora.vars import *\n"
         for token in tokens: # generate a new line of code for each token (line) in the AST
             if token["token_type"] == "function": # if the token is function, then the Python code is `func(arguments)`
-                if token["token_value"] == "include": # if the token is include, then the Python code is an import statement
+                if token["token_value"] == "return": # if the token is return, then the Python code is a return statement
+                    generated_code += "{indent}return {arguments}\n".format(indent=indent, arguments=self._generate_arguments(token["children"]))
+                elif token["token_value"] == "include": # if the token is include, then the Python code is an import statement
                     if imports:
                         generated_code += "{indent}from _aurora.{library_name} import *\n".format(indent=indent, library_name=token["children"][0]["token_value"])
                 elif token["token_value"] in initialized["defined"]: # if it's been defined by the user, then use that name
@@ -83,7 +85,9 @@ class AuroraGenerator:
             elif token["token_type"] == "number": # if the token type is a number, then the Python code is the same as the value
                 generated_code += ",_aurora_var_number({number})".format(number=token["token_value"])
             elif token["token_type"] == "variable": # if the token type is a variable, then the Python code is the same as the value
-                if len(token["children"]) > 0:
+                if token["token_value"] == "void":
+                    generated_code += ",None"
+                elif len(token["children"]) > 0:
                     generated_code += ",{variable}.{function}({arguments})".format(variable=token["token_value"], function=token["children"][0]["token_value"], arguments=self._generate_arguments(token["children"][1:]))
                 else:
                     generated_code += ",{varaible}".format(varaible=token["token_value"])
