@@ -13,6 +13,7 @@ class AuroraGenerator:
         self._parser = AuroraParser(code)
         self.aurora_libraries = os.path.join(os.path.abspath(sys.argv[0]), "..", "libraries").replace("\\","\\\\")
         # generate code
+        print(self._parser.parsed_code)
         self.generated_code = self._generate(self._parser.parsed_code["body"], self._parser.parsed_code["initialized"])
 
     def _generate(self, tokens, initialized, indent="", imports=True):
@@ -30,7 +31,10 @@ class AuroraGenerator:
                     if imports:
                         generated_code += "{indent}from _aurora.{library_name} import *\n".format(indent=indent, library_name=token["children"][0]["token_value"])
                 elif token["token_value"] in initialized["defined"]: # if it's been defined by the user, then use that name
-                    generated_code += "{indent}{function_name}({arguments})\n".format(indent=indent, function_name=token["token_value"], arguments=self._generate_arguments(token["children"]))
+                    if token["children"][0]["token_type"] == "function":
+                        generated_code += "{indent}{function}.{function_name}({arguments})\n".format(indent=indent, function=token["token_value"], function_name=token["children"][0]["token_value"], arguments=self._generate_arguments(token["children"][0]["children"]))
+                    else:
+                        generated_code += "{indent}{function_name}({arguments})\n".format(indent=indent, function_name=token["token_value"], arguments=self._generate_arguments(token["children"]))
                 else: # otherwise, prepend `_aurora_` to it to call a builtin function (don't forget to include it)
                     generated_code += "{indent}_aurora_{function_name}({arguments})\n".format(indent=indent, function_name=token["token_value"], arguments=self._generate_arguments(token["children"]))
             elif token["token_type"] == "comment": # if the token is comment, then the Python code is `# comment`
@@ -47,8 +51,6 @@ class AuroraGenerator:
                     generated_code += "{indent}{variable} = {number}\n".format(indent=indent, variable=token["token_value"], number=self._generate_arguments(token["children"]))
                 else: # otherwise, don't
                     generated_code += "{indent}{variable} = _aurora_var_number()\n".format(indent=indent, variable=token["token_value"])
-            elif token["token_type"] == "return": # if the token is return, then the Python code is `return [var]`
-                generated_code += "return {variable}\n".format(variable=self._generate_arguments(token["children"]))
         return generated_code
 
     # generate the arguments for defined functions
@@ -72,7 +74,7 @@ class AuroraGenerator:
         # takes the children of a function (mostly varaibles, and constants)
         generated_code = ""
         for token in tokens:
-            if token["token_type"] == "string": # if the token type is a stirng, then the Python code is `"value"`
+            if token["token_type"] == "string": # if the token type is a string, then the Python code is `"value"`
                 generated_code += ",_aurora_var_string(\"{string}\")".format(string=token["token_value"])
             elif token["token_type"] == "plus": # if the token type is a plus sign, then the Python code is `num + num2`
                 generated_code += ",_aurora_var_number({number}+{number2})".format(number=token["children"][0]["token_value"], number2=token["children"][1]["token_value"])
@@ -88,9 +90,14 @@ class AuroraGenerator:
                 if token["token_value"] == "void":
                     generated_code += ",None"
                 elif len(token["children"]) > 0:
-                    generated_code += ",{variable}.{function}({arguments})".format(variable=token["token_value"], function=token["children"][0]["token_value"], arguments=self._generate_arguments(token["children"][1:]))
+                    if token["children"][0]["token_type"] == "index":
+                        generated_code += ",*{variable}.get({index},{index2})".format(variable=token["token_value"], index=token["children"][0]["token_value"], index2=token["children"][1]["token_value"])
+                    else:
+                        generated_code += ",{variable}.{function}({arguments})".format(variable=token["token_value"], function=token["children"][0]["token_value"], arguments=self._generate_arguments(token["children"][1:]))
                 else:
                     generated_code += ",{varaible}".format(varaible=token["token_value"])
+            elif token["token_type"] == "list": # if the token is a list, then the Python code is `[item(s)]`
+                generated_code += ",_aurora_var_list(\"{type}\",[{items}])".format(type=token["token_value"], items=self._generate_arguments(token["children"]))
             elif token["token_type"] == "function": # if the token type is a funciton, then the Python code is `func(arguments)`
                 function_name = token["token_value"]
                 if function_name in self._parser.parsed_code["initialized"]["defined"]:

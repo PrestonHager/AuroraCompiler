@@ -23,4 +23,20 @@ class _aurora_var_number(_aurora_var):
     def string(self):
         return self.string_value
 
-__all__ = ["_aurora_var_string", "_aurora_var_number"]
+class _aurora_var_list(_aurora_var):
+    def __init__(self, type, value=None):
+        super(_aurora_var_list, self).__init__(value)
+        self.type = type
+
+    def push(self, value):
+        self.value.append(value)
+    def pop(self):
+        value = self.value[-1]
+        self.value.pop()
+        return value
+    def get(self, index, index2):
+        return self.value[index:index2+1]
+    def get_all(self):
+        return self.value
+
+__all__ = ["_aurora_var_string", "_aurora_var_number", "_aurora_var_list"]

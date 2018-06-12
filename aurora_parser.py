@@ -113,40 +113,54 @@ class AuroraParser:
         # look for string definitions
         elif self._accept("STRING_TYPE", token_index):
             # format is: `String: var = "value"` or STRING_TYPE + ASIGN + VARIABLE + VALUE + (EXPRESSION)
-            if self._expect("ASIGN", 1, token_index+1, "Expected ':' after String variable definition."):
-                if self._expect("VARIABLE", 1, token_index+2, "Expected varaible name after String variable definition."):
+            # first find if it's a list variable or not
+            list_used_index = 0
+            list_found = self._accept("LIST_BEGIN", token_index+1)
+            if list_found:
+                list_used_index = 2
+                if self._accept("NUMBER", token_index+2):
+                    list_used_index = 3
+            if self._expect("ASIGN", 1, token_index+1+list_used_index, "Expected ':' after String variable definition."):
+                if self._expect("VARIABLE", 1, token_index+2+list_used_index, "Expected varaible name after String variable definition."):
                     # get the variable name (id) and add it to initalized varaibles
-                    id = self._lexer.tokenized_code[token_index+2][1]
+                    id = self._lexer.tokenized_code[token_index+2+list_used_index][1]
                     self._add_variable(id, "all")
                     self._add_variable(id, "defined")
                     self._add_variable("string_variables", "required")
                     # if the variable is preset, then it has a value token
-                    if self._accept("VALUE", token_index+3):
-                        variable_value = self._expression(token_index+4)
-                        used_index = 5
+                    if self._accept("VALUE", token_index+3+list_used_index):
+                        variable_value = self._expression(token_index+4+list_used_index)
+                        used_index = 5+list_used_index
                         created_token = self._create_new_token("string_variable", id, [variable_value[1]])
                     # otherwise, it's not preset, and just initialized with a void value
                     else:
-                        used_index = 3
+                        used_index = 3+list_used_index
                         created_token = self._create_new_token("string_variable", id)
         # look for number definitions
         elif self._accept("NUMBER_TYPE", token_index):
             # similar to string definitions: `Number: var = 15` or NUMBER_TYPE + ASIGN + VARIABLE + VALUE + (EXPRESSION)
-            if self._expect("ASIGN", 1, token_index+1, "Expected ':' after Number variable definition."):
-                if self._expect("VARIABLE", 1, token_index+2, "Expected variable name after Number variable definition."):
+            # first find if it's a list variable or not
+            list_used_index = 0
+            list_found = self._accept("LIST_BEGIN", token_index+1)
+            if list_found:
+                list_used_index = 2
+                if self._accept("NUMBER", token_index+2):
+                    list_used_index = 3
+            if self._expect("ASIGN", 1, token_index+1+list_used_index, "Expected ':' after Number variable definition."):
+                if self._expect("VARIABLE", 1, token_index+2+list_used_index, "Expected variable name after Number variable definition."):
                     # get the variable name (id)
-                    id = self._lexer.tokenized_code[token_index+2][1]
+                    id = self._lexer.tokenized_code[token_index+2+list_used_index][1]
                     self._add_variable(id, "all")
                     self._add_variable(id, "defined")
                     self._add_variable("number_variables", "required")
                     # if the variable is set then get the value and return a created token
-                    if self._accept("VALUE", token_index+3):
-                        variable_value = self._expression(token_index+4)
-                        used_index = 5
+                    if self._accept("VALUE", token_index+3+list_used_index):
+                        variable_value = self._expression(token_index+4+list_used_index)
+                        used_index = 5+list_used_index
                         created_token = self._create_new_token("number_variable", id, [variable_value[1]])
                     # otherwise return a created token with no preset variable value
                     else:
-                        used_index = 3
+                        used_index = 3+list_used_index
                         created_token = self._create_new_token("number_variable", id)
         # look for function calls
         elif self._accept("VARIABLE", token_index):
@@ -154,7 +168,7 @@ class AuroraParser:
             id = self._lexer.tokenized_code[token_index][1] # get variable name
             self._add_variable(id, "all")
             # if a FUNC token, `>`, is found then create a token with children of the following expressions (arguments)
-            if self._expect("FUNC", 1, token_index+1):
+            if self._accept("FUNC", token_index+1):
                 self._add_variable(id, "import")
                 arguments = [] # set the list (children) of arguments to "empty"
                 # get the first argument, as it doesn't require a comma before
@@ -176,6 +190,10 @@ class AuroraParser:
                     # make sure the used index is set
                     used_index = 2 + arg_used_index
                     created_token = self._create_new_token("function", id, arguments) # return the created token
+            elif self._accept("OBJ", token_index+1):
+                var = self._expression(token_index+2)
+                used_index = 3 + var[0]
+                created_token = self._create_new_token("function", id, [var[1]])
             else:
                 created_token = self._create_new_token("variable", id)
         # return the created_token and used_index
@@ -234,13 +252,35 @@ class AuroraParser:
                 id = self._expression(token_index + 2)
                 used_index = 3 + id[0]
                 created_token = self._create_new_token("variable", variable, [id[1]])
+            elif self._accept("LIST_INDEX", token_index+1):
+                index = 0
+                index2 = -1
+                if self._accept("NUMBER", token_index+2):
+                    index = self._lexer.tokenized_code[token_index+2][1]
+                    if self._accept("ASIGN", token_index+3):
+                        if self._accept("NUMBER", token_index+4):
+                            index2 = self._lexer.tokenized_code[token_index+4][1]
+                    else:
+                        index2 = index
+                created_token = self._create_new_token("variable", variable, [self._create_new_token("index", index), self._create_new_token("index", index2)])
             else:
-                used_index = 1
                 created_token = self._create_new_token("variable", variable)
             # test to see if there is a end function at the end of the function call. if so add one to used_index
             # this is so that when arguments are added in the function arguments list, the ARGUMENT_SEPERATOR token can be found
             if self._accept("END_FUNC", token_index + used_index):
                 used_index += 1
+        elif self._accept("LIST_BEGIN", token_index):
+            self._expect("LIST_END", -1, token_index, "List end token, `}`, expected after list decleration.")
+            list_items = []
+            list_items_used_index = 0
+            while True:
+                if self._accept("LIST_END", token_index+1+list_items_used_index):
+                    break
+                item = self._expression(token_index+1+list_items_used_index)
+                list_items.append(item[1])
+                list_items_used_index += item[0]
+            used_index = 2 + list_items_used_index
+            created_token = self._create_new_token("list", "", list_items)
         elif self._accept("VOID_TYPE", token_index):
             used_index = 1
             created_token = self._create_new_token("variable", "void")
