@@ -33,6 +33,8 @@ ARGUMENT_SEPERATOR1:=,\s
 LIST_BEGIN:={
 LIST_END:=}
 LIST_INDEX:=@
+IF:=if
+THEN:=then
 
 NUMBER=:[0-9]
 VARIABLE=:_[A-Z][a-z]
