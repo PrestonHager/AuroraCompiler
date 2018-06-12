@@ -18,8 +18,9 @@ Items in *italics* are planned.
   * **Includes**
   * **Builtin Libraries**
   * **Math Operations**
-  * Function Definitions
-  * *Lists*
+  * **Function Definitions**
+  * **Lists**
+  * *Comparisons*
 * *Error Handling*
 * *Strong Variable Typing*
 
@@ -33,7 +34,8 @@ python compiler.py [filename] [optional flags]
 
 `[filename]` is optional, and replaced by whichever file you want to compile.
 The `.aurora` file will be compiled to a `.py` Python file.
-The `-r` or `--run` flags are optional, and run the compiled program after compiling
+The `-r` or `--run` flags are optional, and run the compiled program after compiling.
+Note that all compiled Aurora files (`.py`) files are in the build directory from  the same level as the `compiler.py` file.
 To run a compiled Aurora, `.py` file, use:
 
 ```
