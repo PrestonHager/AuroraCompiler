@@ -13,7 +13,6 @@ class AuroraGenerator:
         self._parser = AuroraParser(code)
         self.aurora_libraries = os.path.join(os.path.abspath(sys.argv[0]), "..", "libraries").replace("\\","\\\\")
         # generate code
-        print(self._parser.parsed_code)
         self.generated_code = self._generate(self._parser.parsed_code["body"], self._parser.parsed_code["initialized"])
 
     def _generate(self, tokens, initialized, indent="", imports=True):

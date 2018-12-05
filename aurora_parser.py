@@ -35,7 +35,8 @@ class AuroraParser:
             index += 1      # increment the index by one
         # if any of the while loop conditions failed then it's false
         # if it is false, then there is a syntax error.
-        raise SyntaxError(msg+" At {position} from {area}".format(position=', '.join([str(p) for p in self._lexer.tokenized_code[token_index][2]]), area=''.join([t[1] for t in self._lexer.tokenized_code[token_index-2:token_index+1]])))
+        pos = [p for p in self._lexer.tokenized_code[token_index][2]]
+        raise SyntaxError(msg+" At {position} from {area}".format(position=str(pos[1])+":"+str(pos[0]), area=''.join([t[1] for t in self._lexer.tokenized_code[token_index-2:token_index+1]])))
         return False
 
     # the add variable adds to the initialized dictionary of the parsed code

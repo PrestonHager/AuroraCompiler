@@ -23,3 +23,5 @@ build/*
 
 # Test files
 bnf_grammar.txt
+bnf_compiler.py
+utils/*

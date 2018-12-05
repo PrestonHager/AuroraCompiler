@@ -2,6 +2,8 @@
 
 import sys
 from aurora_generator import *
+from aurora_parser import *
+from aurora_lexer import *
 import traceback
 import os
 import subprocess
@@ -12,12 +14,15 @@ def main():
         os.makedirs("./build/")
     if len(sys.argv) > 1:
         with open(sys.argv[1], 'r') as f_in:
+            lexer = AuroraLexer(f_in.read())
             generator = AuroraGenerator(f_in.read())
             # print(generator._parser._lexer.tokenized_code)
             # print(generator._parser.parsed_code)
             filename = "./build/" + os.path.basename(sys.argv[1]).strip(".aurora") + ".py"
             with open(filename, 'w') as f_out:
-                f_out.write(generator.generated_code)
+                # f_out.write(generator._parser._lexer.tokenized_code)
+                # print(generator._parser.parsed_code)
+                print(lexer.tokenized_code)
             if "-r" in sys.argv or "--run" in sys.argv:
                 try:
                     subprocess.call(["python", filename])
