@@ -22,6 +22,8 @@ ARGUMENT_SEPERATOR:=,
 LIST_BEGIN:={
 LIST_END:=}
 LIST_INDEX:=@
+IF:=if
+THEN:=then
 
 NUMBER=:[0-9]+(\.[0-9])?
 VARIABLE=:(_[A-Za-z0-9]+|[A-Za-z]+[A-Za-z0-9]*)
