@@ -1,8 +1,8 @@
-function        ::= variable ">" arguments | variable ">"
-variable        ::= opt-underscore alpha alpha_numerals
-opt-underscore  ::= "_" | ""
-alpha           ::= "A" | "B" | "C" | "D" | "E" | "F" | "G" | "H" | "I" | "J" | "K" | "L" | "M" | "N" | "O"| "P" | "Q" | "R" | "S" | "T" | "U" | "V" | "W" | "X" | "Y" | "Z" | "a" | "b" | "c" | "d" | "e" | "f" | "g" | "h" | "i" | "j" | "k" | "l" | "m" | "n" | "o" | "p" | "q" | "r" | "s" | "t" | "u" | "v" | "w" | "x" | "y" | "z"
-numeral         ::= "0" | "1" | "2" | "3" | "4" | "5" | "6" | "7" | "8" | "9"
-alpha_numeral   ::= alpha | numeral
-alpha_numerals  ::= alpha alpha_numeral | alpha
-arguments       ::= argumnet "," arguments | argument
+# optional underscore, alpha numeral, cannot start with number.
+variable        ::= (_[A-Za-z0-9]*|[A-Za-z]+[A-Za-z0-9]*)
+# any int or float value
+value           ::= ([0-9]+\.[0-9]+|\.[0-9]+|[0-9]+)
+argument        ::= ({variable}|{value})
+arguments       ::= ({argument},({argument})+|{argument})
+new_line        ::= ;
+function        ::= ({variable}\>{arguments}|{variable}\>)
