@@ -3,6 +3,11 @@
 Aurora is a simple language aimed towards low level implementation with readability.
 It was made for practice with compilers, and for an IT class.
 
+## PLEASE NOTE
+
+This project is currently overgoing a major rehaul.
+Don't expect anything to be complete yet, as it is being completely rewriten.
+
 ## Current Progress
 
 The following is a list of what has been completed, what is being worked on, and what is planned in the future.
@@ -10,16 +15,16 @@ Items in **bold** have been completed.
 Items in plain text are in progress.
 Items in *italics* are planned.
 
-* **Lexer**
-* **Parser**
-* **Generator**
+* *Lexer*
+* *Parser*
+* *Generator*
 * *Syntax*
-  * **Function Calls**
-  * **Includes**
-  * **Builtin Libraries**
-  * **Math Operations**
-  * **Function Definitions**
-  * **Lists**
+  * *Function Calls*
+  * *Includes*
+  * *Builtin Libraries*
+  * *Math Operations*
+  * *Function Definitions*
+  * *Lists*
   * *Comparisons*
 * *Error Handling*
 * *Strong Variable Typing*

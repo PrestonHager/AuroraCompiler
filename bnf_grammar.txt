@@ -1,8 +1,0 @@
-# optional underscore, alpha numeral, cannot start with number.
-variable        ::= (_[A-Za-z0-9]*|[A-Za-z]+[A-Za-z0-9]*)
-# any int or float value
-value           ::= ([0-9]+\.[0-9]+|\.[0-9]+|[0-9]+)
-argument        ::= ({variable}|{value})
-arguments       ::= ({argument},({argument})+|{argument})
-new_line        ::= ;
-function        ::= ({variable}\>{arguments}|{variable}\>)
