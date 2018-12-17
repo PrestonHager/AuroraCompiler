@@ -1,3 +1,4 @@
 include>io;
 
+// print a simple message.
 print>"Somewhere over the rainbow!";
