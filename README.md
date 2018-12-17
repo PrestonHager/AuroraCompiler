@@ -34,17 +34,20 @@ Items in *italics* are planned.
 Aurora compiler can be run using:
 
 ```
-python compiler.py [filename] [optional flags]
+aurora [filename] [optional flags]
 ```
 
 `[filename]` is optional, and replaced by whichever file you want to compile.
-The `.aurora` file will be compiled to a `.py` Python file.
+The `.aurora` file will be compiled to a `.asm` Assembly file.
 The `-r` or `--run` flags are optional, and run the compiled program after compiling.
 Note that all compiled Aurora files (`.py`) files are in the build directory from  the same level as the `compiler.py` file.
-To run a compiled Aurora, `.py` file, use:
+To run a compiled Aurora, `.asm` file, you must have an assembler such as `nasm`.
+Then you may use it to assemble it to a specified platform.
+The below is an example of assembling to Windows, and then Linux/UNIX, respectively.
 
 ```
-python [filename]
+nasm -f win32 [filename.asm]
+nasm -f elf32 [filename.asm]
 ```
 
 More can be found with the [aurora compiler documentation][2] on [Read the Docs][3].
@@ -57,7 +60,7 @@ Python is needed and can be found at their website, [Python.org][1].
 
 * [Python][1] - Development language
 * [Read the Docs][3] - Documentation (using Sphinx framework)
-* [A Brain][4] - Some programmer's brain, code doesn't just grow on trees.
+* [A Brain][4] - Some programmer's brain....
 
 ## Contributing
 
