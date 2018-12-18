@@ -30,8 +30,8 @@ class Lexer:
                     if ''.join(self.code[position:position+len(operation)]) == operation:
                         if len(token) > 1:
                             self.append_token("WORD", ''.join(token[:-len(operation)]), [character_position[0], character_position[1]-len(operation)-len(token)+1])
-                            token = ""
                         self.append_token(opr, operation, [character_position[0], character_position[1]-len(operation)])
+                        token = ""
                         break
             elif self.code[position] == "\n":
                 comment = False

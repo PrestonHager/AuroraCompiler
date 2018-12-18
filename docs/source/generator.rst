@@ -19,24 +19,21 @@ Input:
 
 .. code::
 
-    {"body": [
-        {
-        "token_type": "function",
-        "token_value": "print",
-        "children": [
-            {
-                "token_type": "string",
-                "token_value": "Somewhere over the rainbow!",
-                "children": []
-            }]
-        }
-    ]}
+TOP_LEVEL = [
+  FUNCTION = [
+    ARGUMENTS = "Somewhere over the rainbow!"
+  ]
+]
 
 Output:
 
 .. code::
 
-    print("Somewhere over the rainbow!")
+    mov si, _VAR_0
+    push si
+    call _aurora_print
+
+    _VAR_0 db "Somewhere over the rainbow!", 0
 
 Timeline?
 ~~~~~~~~~

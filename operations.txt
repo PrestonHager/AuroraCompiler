@@ -3,3 +3,4 @@ ENDLINE := ;
 STRING_DEF := "
 SPACE := \s
 NEWLINE := \n
+COMMA := ,
