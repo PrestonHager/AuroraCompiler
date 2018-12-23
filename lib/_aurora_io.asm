@@ -1,20 +1,17 @@
 _aurora_print:
   pusha
-  pop si
-  mov ah, 0Eh     ; Function code
+  mov ax, 0
 
 .repeat:
-  lodsb				    ; Get char from string
-  cmp al, 0
-  je .done_str    ; If char is zero, finish
-  int 10h				  ; Else, call 10h interrupt
-  jmp .repeat			; And then loop
+  ; move the pointer at [_AURORA_STRING_ARG_BUFFER+ax] into esi, and print
+  mov esi, [_AURORA_STRING_ARG_BUFFER+ax]
+  call graphics_print_string
 
 .done_str:
-  dec bx
-  cmp bx, 0
+  inc ax        ; increase index by 1
+  dec bx        ; decrease total argument by 1
+  cmp bx, 0     ; if no more argument, .done
   je .done
-  pop si
   jmp .repeat
 
 .done:          ; finish function

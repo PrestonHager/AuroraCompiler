@@ -13,7 +13,7 @@ class Generator:
         for node in self.parser.ast.children:
             self.generated_code += self._generate_node(node) + "\n"
         for variable in self.variables:
-            self.generated_code += f"_VAR_{self.variables[variable]} db \"{variable}\", 0\n"
+            self.generated_code += f"_VAR_{self.variables[variable]} db \'{variable}\', 0\n"
         self.generated_code = self.generated_code.strip() + "\n_aurora_end:"
 
     def _generate_node(self, node):
@@ -34,13 +34,16 @@ class Generator:
             else:
                 for argument in arguments:
                     if argument.type == "STRING":
-                        if argument.children[0].value in self.variables:
-                            generated += f"mov si, _VAR_{self.variables[argument.children[0].value]}\npush si\n"
-                        else:
+                        if argument.children[0].value not in self.variables:
                             self.variables[argument.children[0].value] = self.variable_index
-                            generated += f"mov si, _VAR_{self.variable_index}\npush si\n"
                             self.variable_index += 1
+                        generated += f"mov dword [_AURORA_STRING_ARG_BUFFER], _VAR_{self.variables[argument.children[0].value]}\n"
                 generated += f"mov bx, {len(arguments)}\ncall _aurora_{name}"
+        elif node.type == "ARG_BUFFERS":
+            for arg in node.children:
+                type = arg.children[0].children[0].value
+                amount = arg.children[1].children[0].value
+                generated += f"_AURORA_{type}_ARG_BUFFER times {amount} db 0\n"
         elif node.type == "EOF":
-            generated += "jmp {}".format("_aurora_end")
-        return generated
+            generated += "jmp _aurora_end"
+        return generated.strip()

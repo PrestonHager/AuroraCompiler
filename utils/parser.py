@@ -6,6 +6,7 @@ class Parser:
     def __init__(self, lexer):
         self.lexer = lexer
         self.ast = ASTNode("TOP_LEVEL")
+        self.argument_lengths = {"STRING": 0, "INT": 0, "ID": 0}
 
     def parse(self):
         tokens = []
@@ -22,6 +23,8 @@ class Parser:
         self.ast.add_child(ASTNode("EOF"))
         for node in include_nodes:
             self.ast.add_child(node)
+        del self.argument_lengths["ID"]
+        self.ast.add_child(ASTNode("ARG_BUFFERS").add_children(*[ASTNode("ARG_BUFFER").add_child(ASTNode("NAME").add_child(ASTValue(arg))).add_child(ASTNode("LENGTH").add_child(ASTValue(self.argument_lengths[arg]))) for arg in self.argument_lengths]))
 
     def _parse_line(self, tokens):
         i = 0
@@ -55,9 +58,12 @@ class Parser:
             elif tokens[i]["id"] == "COMMA":
                 id_index += 1
                 id_values.append({"val": "", "type": "ID"})
+        type_amount = {"STRING": 0, "INT": 0, "ID": 0}
         for id in id_values:
+            type_amount[id["type"]] += 1
             if not id["matched"]:
                 raise ParserException("{type} was not closed, `{code}`. At {pos}".format(type=id["type"], code=id["val"], pos=', '.join([str(p) for p in id["pos"]])))
+        self.argument_lengths = {k: max(type_amount[k], self.argument_lengths[k]) for k in type_amount}
         return ([ASTNode(id["type"]).add_child(ASTValue(id["val"])) for id in id_values], False)
 
 class ASTNode:
