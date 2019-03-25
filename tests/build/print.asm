@@ -7,8 +7,9 @@ mov bx, 2
 call _aurora_print
 jmp _aurora_end
 %include "lib/_aurora_io.asm"
-_AURORA_STRING_ARG_BUFFER times 2 db 0
-_AURORA_INT_ARG_BUFFER times 0 db 0
+_AURORA_STRING_ARG_BUFFER times 2 dd 0
+_AURORA_INT_ARG_BUFFER times 0 dd 0
 _VAR_0 db 'Somewhere over the rainbow!', 0
 _VAR_1 db 'Hi', 0
 _aurora_end:
+jmp 08h:0x600+1

@@ -14,7 +14,7 @@ class Generator:
             self.generated_code += self._generate_node(node) + "\n"
         for variable in self.variables:
             self.generated_code += f"_VAR_{self.variables[variable]} db \'{variable}\', 0\n"
-        self.generated_code = self.generated_code.strip() + "\n_aurora_end:"
+        self.generated_code = self.generated_code.strip() + "\n_aurora_end:\njmp 08h:0x600+1"
 
     def _generate_node(self, node):
         generated = ""
@@ -43,7 +43,7 @@ class Generator:
             for arg in node.children:
                 type = arg.children[0].children[0].value
                 amount = arg.children[1].children[0].value
-                generated += f"_AURORA_{type}_ARG_BUFFER times {amount} db 0\n"
+                generated += f"_AURORA_{type}_ARG_BUFFER times {amount} dd 0\n"
         elif node.type == "EOF":
             generated += "jmp _aurora_end"
         return generated.strip()
