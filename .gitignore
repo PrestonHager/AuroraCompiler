@@ -20,4 +20,4 @@ docs/build/*
 
 # Compiler build directory
 build/*
-test/build/*
+tests/build/*
