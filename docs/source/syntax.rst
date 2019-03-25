@@ -84,12 +84,12 @@ required, and one optional argument.
 
     func: rainbows>colors::String{}, pretty::Number=1 => Void;
         for>Number:i=0, i ?< colors.length>, i=i+1;
-        print>colors{i}+"-";
+          print>colors{i}+"-";
         println>"";
         if>pretty ?= 1;
-        println>"It's a pretty rainbow.";
+          println>"It's a pretty rainbow.";
         else;
-        println>"It's just a rainbow.";
+          println>"It's just a rainbow.";
     end;
 
 Calling a Function
@@ -105,7 +105,7 @@ following code, then it may be called.
     func: barBar> => Void;
         println>"fooFoo";
     end;
-    
+
     barBar>;
 
 Including Functions

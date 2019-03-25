@@ -33,7 +33,7 @@ and what the call name is. The following might be an example of the
 ``greeting`` library.
 
 .. code::
-    
+
     {
     "bye": {
         "file": "farewells.aurora",
@@ -49,7 +49,7 @@ and what the call name is. The following might be an example of the
     }
     }
 
-The functions are usually in in alphabetical order. The sturcture could
+The functions are usually in in alphabetical order. The structure could
 be defined as so:
 
 .. code::
@@ -64,15 +64,15 @@ be defined as so:
 The ``salutations.aurora`` file then might look like so:
 
 .. code::
-    
+
     include>io;
-    
+
     func: hello>String name => Void;
         print>"Hello, ";
         print>name;
         println>"!";
     end;
-    
+
     func: hi> => Void;
         println>"Hi there.";
     end;
@@ -80,9 +80,9 @@ The ``salutations.aurora`` file then might look like so:
 And the ``farewells.aurora`` file might look as follows:
 
 .. code::
-    
+
     include>io;
-    
+
     func: bye>String name => Void;
         print>"Good bye, ";
         print>name;

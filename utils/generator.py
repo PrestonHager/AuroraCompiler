@@ -28,9 +28,9 @@ class Generator:
                     name = child.children[0].value
             if name == "include":
                 if arguments[0].type == "ID":
-                    generated += f"%include \"lib/_aurora_{arguments[0].children[0].value}.asm\""
+                    generated += f"%include \"libraries/_aurora_{arguments[0].children[0].value}.asm\""
                 else:
-                    generated += f"%include \"lib/{arguments[0].children[0].value}.asm\""
+                    generated += f"%include \"libraries/{arguments[0].children[0].value}.asm\""
             else:
                 for argument in arguments:
                     if argument.type == "STRING":
