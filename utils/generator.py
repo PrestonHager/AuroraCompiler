@@ -17,6 +17,7 @@ class Generator:
         self.generated_code = self.generated_code.strip() + "\n_aurora_end:\njmp 08h:0x600+1"
 
     def _generate_node(self, node):
+        # print(node)
         generated = ""
         if node.type == "FUNCTION":
             arguments = []
@@ -32,13 +33,39 @@ class Generator:
                 else:
                     generated += f"%include \"libraries/{arguments[0].children[0].value}.asm\""
             else:
+                print()
                 for argument in arguments:
+                    print(argument)
                     if argument.type == "STRING":
                         if argument.children[0].value not in self.variables:
                             self.variables[argument.children[0].value] = self.variable_index
                             self.variable_index += 1
                         generated += f"mov dword [_AURORA_STRING_ARG_BUFFER], _VAR_{self.variables[argument.children[0].value]}\n"
+                    elif argument.type == "FUNCTION":
+                        generated += self._generate_node(argument)+"\n"
+                    elif argument.type == "ID":
+                        variable = argument.children[0].value
+                        type = self.parser.variables[variable]                            
+                        generated += f"mov dword [_AURORA_{type}_ARG_BUFFER], _VAR_{variable}\n"
                 generated += f"mov bx, {len(arguments)}\ncall _aurora_{name}"
+        elif node.type == "STRING-VARIABLE":
+            name = ""
+            value = ""
+            for n in node.children:
+                if n.type == "NAME":
+                    name = n.children[0].value
+                elif n.type == "VALUE":
+                    value = n.children[0].children[0].value
+            generated += f"_VAR_{name} db '{value}', 0\ntimes {255-len(value)} db 0\n"
+        elif node.type == "INTEGER-VARIABLE":
+            name = ""
+            value = ""
+            for n in node.children:
+                if n.type == "NAME":
+                    name = n.children[0].value
+                elif n.type == "VALUE":
+                    value = n.children[0].children[0].value
+            generated += f"_VAR_{name} dd {value}\n"
         elif node.type == "ARG_BUFFERS":
             for arg in node.children:
                 type = arg.children[0].children[0].value

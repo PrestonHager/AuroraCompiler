@@ -4,3 +4,6 @@ STRING_DEF := "
 SPACE := \s
 NEWLINE := \n
 COMMA := ,
+EQUALS := =
+STRING_VAR := String:
+NUMBER_VAR := Number:
