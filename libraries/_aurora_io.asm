@@ -1,6 +1,8 @@
 _aurora_print:
   pusha
+  mov eax, 0xb8000
   call _aurora_get_cursor
+  mov [eax], byte 'A'
 
 .repeat:
   ; move the pointer at [_AURORA_STRING_ARG_BUFFER+ax] into esi, and print
@@ -25,9 +27,9 @@ _aurora_print:
   ret
 
 _aurora_get_cursor:
-  push ebx
-  push edx
-  mov ebx, 0          ; return with the cursor position of video memeory in eax but for now store in ebx
+  push bx
+  push dx
+  mov bx, 0           ; return with the cursor position of video memeory in eax but for now store in bx
 
   .low_byte:          ; the low byte is al
   mov al, 0x0f        ; ask for low byte
@@ -35,7 +37,7 @@ _aurora_get_cursor:
   out dx, al          ; out io
   mov dx, 0x03D5      ; data vga port
   in al, dx           ; in io
-  mov bl, al          ; move value into low byte of ebx
+  mov bl, al          ; move value into low byte of bx
 
   .high_byte:         ; the high byte is ah
   mov al, 0x0e        ; ask for high byte
@@ -43,10 +45,10 @@ _aurora_get_cursor:
   out dx, al
   mov dx, 0x03D5      ; data vga port
   in al, dx
-  mov bh, al          ; move value into high byte of ebx
+  mov bh, al          ; move value into high byte of bx
 
   .done:
-  mov eax, ebx        ; put ebx into eax.
-  pop edx
-  pop ebx
+  mov ax, bx        ; put ebx into eax.
+  pop dx
+  pop bx
   ret                 ; pop and return

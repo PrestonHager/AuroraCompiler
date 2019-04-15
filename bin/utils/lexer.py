@@ -3,10 +3,10 @@
 # for Aurora Compiler
 
 class Lexer:
-    def __init__(self, code):
+    def __init__(self, code, bin_dir):
         self.code = code
         self.lexed_code = []
-        with open("operations.txt", 'r') as f_in:
+        with open(bin_dir+"/bin/operations.txt", 'r') as f_in:
             cont = f_in.read().strip()
         self.operations = {l.split(":=")[0].strip(): l.split(":=")[1].strip().replace("\s", " ").replace("\\n", "\n") for l in cont.split("\n")}
 

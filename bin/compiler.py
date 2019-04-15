@@ -7,7 +7,7 @@ from utils.parser import *
 from utils.generator import *
 
 class Compiler:
-    def __init__(self, file=None, text=None):
+    def __init__(self, bin_dir, file=None, text=None):
         if file != None:
             with open(file, 'r') as f_in:
                 code = f_in.read()
@@ -15,9 +15,9 @@ class Compiler:
             code = text
         else:
             raise Exception("No code input found. Please supply either a file or text.")
-        self.lexer = Lexer(code)
+        self.lexer = Lexer(code, bin_dir)
         self.parser = Parser(self.lexer)
-        self.generator = Generator(self.parser)
+        self.generator = Generator(self.parser, bin_dir)
 
     def _lex(self):
         self.lexer.lex()
@@ -49,8 +49,11 @@ if __name__ == '__main__':
     build_dir = os.path.join(*filepath[:-1], "build")
     if not os.path.exists(build_dir):
         os.makedirs(build_dir)
-    outloc = os.path.join(*filepath[:-1], "build", ''.join(filepath[-1].split(".")[:-1])+".asm")
+    outloc = os.path.join(*filepath[:-1], "build", ''.join(filepath[-1].split(".")[:-1])+".bin")
+    bin_dir = os.path.join(*os.path.split(os.path.dirname(os.path.abspath(__file__)))[:-1])
     args = plum.get_args({"output": ["-o", "--out"]}, {"output": plum.String(outloc)})
-    compiler = Compiler(file=filename)
+    compiler = Compiler(bin_dir, file=filename)
     compiler.run()
-    compiler.save(args["output"])
+    compiler.save(args["output"]+".asm")
+    os.system(f"nasm -f bin -o {args['output']} {args['output']+'.asm'}")
+    # os.remove(args["output"]+".asm")
