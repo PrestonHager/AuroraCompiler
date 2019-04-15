@@ -2,6 +2,7 @@
 
 Aurora is a simple language aimed towards low level implementation with readability.
 It was made for practice with compilers, and for an IT class.
+Later it was adopted for [Startaste][5], an OS developed by I, [Preston Hager][4].
 
 ## PLEASE NOTE
 
@@ -15,17 +16,18 @@ Items in **bold** have been completed.
 Items in plain text are in progress.
 Items in *italics* are planned.
 
-* *Lexer*
-* *Parser*
-* *Generator*
-* *Syntax*
-  * *Function Calls*
-  * *Includes*
-  * *Builtin Libraries*
-  * *Math Operations*
-  * *Function Definitions*
-  * *Lists*
-  * *Comparisons*
+* **Lexer**
+* **Parser**
+* Generator
+* Syntax
+  - Variable Definitions
+  - **Function Calls**
+  - **Includes**
+  - Builtin Libraries
+  - *Math Operations*
+  - *Function Definitions*
+  - *Lists*
+  - *Comparisons*
 * *Error Handling*
 * *Strong Variable Typing*
 
@@ -37,28 +39,22 @@ Aurora compiler can be run using:
 aurora [filename] [optional flags]
 ```
 
-`[filename]` is optional, and replaced by whichever file you want to compile.
-The `.aurora` file will be compiled to a `.asm` Assembly file.
-The `-r` or `--run` flags are optional, and run the compiled program after compiling.
-Note that all compiled Aurora files (`.py`) files are in the build directory from  the same level as the `compiler.py` file.
-To run a compiled Aurora, `.asm` file, you must have an assembler such as `nasm`.
-Then you may use it to assemble it to a specified platform.
-The below is an example of assembling to Windows, and then Linux/UNIX, respectively.
+`[filename]` is the file that you want to compile.
+It can be either an absolute or a relative path.
+The `.aurora` file will be compiled to a `.bin` file after going through nasm as a `.asm` file.
+Note that all compiled Aurora files (`.bin`) files are in the build directory from original file.
 
-```
-nasm -f win32 [filename.asm]
-nasm -f elf32 [filename.asm]
-```
-
-More can be found with the [aurora compiler documentation][2] on [Read the Docs][3].
+More information can be found with the [aurora compiler documentation][2] on [Read the Docs][3].
 
 ### Prerequisites and Installing
 
 Python is needed and can be found at their website, [Python.org][1].
+NASM is needed to compile to `.asm` files, found at [nasm.us][6].
 
 ## Built With
 
 * [Python][1] - Development language
+* [NASM][6] - Assembler
 * [Read the Docs][3] - Documentation (using Sphinx framework)
 * [A Brain][4] - Some programmer's brain....
 
@@ -84,3 +80,5 @@ This project is licensed under the GNU General Public License v3.0, see the [LIC
 [2]: http://auroracompiler.readthedocs.io/en/latest
 [3]: https://readthedocs.org
 [4]: https://github.com/PrestonHager
+[5]: https://github.com/PrestonHager/Startaste
+[6]: https://www.nasm.us/
