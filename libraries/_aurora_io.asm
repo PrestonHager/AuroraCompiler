@@ -1,8 +1,8 @@
 _aurora_print:
   pusha
   mov eax, 0xb8000
-  call _aurora_get_cursor
   mov [eax], byte 'A'
+  call _aurora_get_cursor
 
 .repeat:
   ; move the pointer at [_AURORA_STRING_ARG_BUFFER+ax] into esi, and print

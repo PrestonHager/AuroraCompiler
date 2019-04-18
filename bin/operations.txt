@@ -5,5 +5,7 @@ SPACE := \s
 NEWLINE := \n
 COMMA := ,
 EQUALS := =
+STRING_PARAMETER := ::String
+NUMBER_PARAMETER := ::Number
 STRING_VAR := String:
 NUMBER_VAR := Number:

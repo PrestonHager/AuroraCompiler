@@ -1,0 +1,3 @@
+#!/bin/bash
+COMPILER=`dirname $0`/compiler.py
+python3 $COMPILER $1

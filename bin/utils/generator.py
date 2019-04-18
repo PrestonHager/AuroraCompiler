@@ -33,6 +33,11 @@ class Generator:
                     generated += f"%include \"{self.bin_dir}/libraries/_aurora_{arguments[0].children[0].value}.asm\""
                 else:
                     generated += f"%include \"{self.bin_dir}/libraries/{arguments[0].children[0].value}.asm\""
+            elif name == "_asm":
+                if arguments[0].type == "ID":
+                    raise(Exception, "Variable support with _asm function is not yet implmented.")
+                else:
+                    generated += arguments[0].children[0].value
             else:
                 for argument in arguments:
                     if argument.type == "STRING":

@@ -32,6 +32,7 @@ class Parser:
 
     def _parse_line(self, tokens):
         i = 0
+        print(tokens)
         for i in range(len(tokens)):
             token = tokens[i]
             if token["id"] == "FUNC":
