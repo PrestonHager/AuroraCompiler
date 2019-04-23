@@ -7,4 +7,4 @@ println>"Function 2", " Tests";
 // Define a variable
 Number: age = 15;
 // and see if it prints with a second argument after a function call.
-println>"The age is ", age.string><, " year(s) old.";
+println>"The age is ", age.str><, " year(s) old.";

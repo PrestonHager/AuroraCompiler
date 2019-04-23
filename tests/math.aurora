@@ -8,51 +8,51 @@ println>"Testing builtin math";
 // Test to see if 1 + 1 = 2
 Number: two = 1 + 1;
 print>"1 + 1 = ";
-println>two.string>;
+println>two.str>;
 // Test to see if 15 - 9 = 6
 Number: six = 15 - 9;
 print>"15 - 9 = ";
-println>six.string>;
+println>six.str>;
 // Test to see if 5 * 12 = 60
 Number: sixty = 5 * 12;
 print>"5 * 12 = ";
-println>sixty.string;
+println>sixty.str>;
 // Test to see if 100 / 25 = 4
 Number: quarter = 100 / 25;
 print>"100 / 25 = ";
-println>quarter.string;
+println>quarter.str>;
 
 println>"Testing Math Library";
 
 // Check to see if 7+2 + 8 = 17
 Number: age = add>7+2, 8;
 print>"7+2 + 8 = ";
-println>age.string>;
+println>age.str>;
 
 // Check to see if 4 * 3 = 12
 Number: twelve = mul>3, 4;
 print>"4 * 3 = ";
-println>twelve.string>;
+println>twelve.str>;
 
 // Check to see if 2 ^ 4 = 16
 Number: power_two = pow>2, 4;
 print>"2 ^ 4 = ";
-println>power_two.string>;
+println>power_two.str>;
 
 // Check to see if 0 - 24 = -24
 Number: negitive_twenty_four = sub>0, 24;
 print>"0 - 24 = ";
-println>negitive_twenty_four.string;
+println>negitive_twenty_four.str;
 
 // Check to see if 1 / 2 = 0.5
 Number: half = div>1, 2;
 print>"1 / 2 = ";
-println>half.string>;
+println>half.str>;
 
 // Check to see if |-52| = 52 = |52|
 Number: negitive_abs = abs>-52;
 Number: positive_abs = abs>52;
 print>"|-52| = ";
-println>negitive_abs.string>;
+println>negitive_abs.str>;
 print>"|52| = ";
-println>positive_abs.string>;
+println>positive_abs.str>;

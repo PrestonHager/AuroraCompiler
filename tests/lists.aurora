@@ -7,9 +7,9 @@ println>"List Variable Tests";
 // Define a list.
 String{}: greeting = {"Hello, "};
 // and print out the first item
-print>greeting@0;
+print>greeting{0};
 
 // Now try pushing to the list
 greeting.push>"Pi!";
 // and print out the second pushed item
-println>greeting@1;
+println>greeting{1};

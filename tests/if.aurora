@@ -6,12 +6,12 @@ println>"Comparison Tests";
 
 // First test equal to, `==`.
 // See if 15 is equal to 15
-if>15?=15;
-  println>"15 == 15: True";
+if> 15 ?= 15;
+  println>"15 ?= 15: True";
 
 // Test to see if math is working with comparisons.
-Number: age = 15;
-if>age+20 ?= 25; then;
-  println>"Age + 20 == 25: True";
+Number: age = 5;
+if> age+20 ?= 25; then;
+  println>"Age + 20 ?= 25: True";
   println>"This was also a multi-line if statement.";
 end;

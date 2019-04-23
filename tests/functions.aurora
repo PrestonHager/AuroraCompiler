@@ -3,11 +3,17 @@
 include>io;
 
 // Define greet function
-func: greet>name::String => Void;
+func greet>name::String => Void;
   print>"Hello, ";
   println>name;
   return>Void;
 end;
 
+// A function without a return type automatically returns void.
+func void_func>;
+  print>"Automatically returning void.";
+end;
+
 // Greet the person, Pi
 greet>"Pi";
+void_func>;
