@@ -2,8 +2,8 @@
 ; https://github.com/PrestonHager/AuroraCompiler
 [BITS 32]
 
-; Arguments: []
-call test
+%include "_aurora_io"
+%include "fake"
 ; print a simple message.
-; Arguments: []
-call test
+; Arguments: [<ASTValue STRING: `Somewhere over the rainbow!`, <ASTValue STRING: `Hi`]
+call print

@@ -32,16 +32,24 @@ class Generator:
         if node.name == "COMMENT":
             generated += f"; {node.children[0].value.strip()}"
         if node.name == "FUNCTION":
-            for child in node.children:
-                if child.name == "NAME":
-                    name = child.value
-                elif child.name == "ARGUMENTS":
-                    arguments = child.children
+            children_dict = self._children_dictionary(node)
+            name = children_dict["NAME"].value
+            arguments = children_dict["ARGUMENTS"].children
             if name == "include":
-                file = arguments[0]
+                type = arguments[0]
+                if type.name == "STRING":
+                    file = arguments[0].value
+                else:
+                    file = "_aurora_" + arguments[0].value
                 generated += f"%include \"{file}\""
             elif name == "_asm":
                 generated += f"{arguments}"
             else:
                 generated += f"; Arguments: {arguments}\ncall {name}"
         return generated.strip()+"\n"
+
+    def _children_dictionary(self, node):
+        children_dictionary = {}
+        for child in node.children:
+            children_dictionary[child.name] = child
+        return children_dictionary
