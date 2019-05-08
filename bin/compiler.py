@@ -79,7 +79,7 @@ if __name__ == '__main__':
     build_dir = os.path.join(*filepath[:-1], "build")
     if not os.path.exists(build_dir):
         os.makedirs(build_dir)
-    outloc = os.path.join(*filepath[:-1], "build", ''.join(filepath[-1].split(".")[:-1]))
+    outloc = os.path.join(*filepath[:-1], ''.join(filepath[-1].split(".")[:-1]))
     bin_dir = os.path.join(*os.path.split(os.path.dirname(os.path.abspath(__file__)))[:-1])
     args = plum.get_args({"output": ["-o", "--out"]}, {"output": plum.String(outloc)})
     compiler = Compiler(bin_dir, file=filename)

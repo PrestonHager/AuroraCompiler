@@ -30,7 +30,6 @@ class Parser:
         nodes = []
         i = 0
         while i < len(self.lexer.lexed_code):
-            print(self.lexer.lexed_code[i])
             node, increase = self._parse(self.lexer.lexed_code, i)
             if node != None:
                 nodes.append(node)
@@ -42,8 +41,6 @@ class Parser:
     def _parse(self, tokens, index):
         node = None
         increase = 1
-        ASTNode("").children = None
-        print(ASTNode(""))
         if self._parse_check("COMMENT", tokens, index):
             increase += self._find_token(tokens[index+1:], "NEWLINE")
             comment_end = index + increase
@@ -52,8 +49,7 @@ class Parser:
         if self._parse_check("FUNCTION", tokens, index):
             increase += self._find_token(tokens[index+1:], "ENDLINE")
             end_line = index + increase
-            node = ASTNode("NONE")
-            # node = ASTNode("FUNCTION").add_child(ASTNode("ARGUMENTS").add_children(*[])).add_child(ASTValue("test", "NAME"))
+            node = ASTNode("FUNCTION").add_child(ASTNode("ARGUMENTS").add_children(*[])).add_child(ASTValue("test", "NAME"))
         return (node, increase)
 
     def _find_token(self, tokens, token):

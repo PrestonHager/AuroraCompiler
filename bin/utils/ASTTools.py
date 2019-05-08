@@ -31,8 +31,8 @@ class ASTBase:
         return self.__repr__()
 
 class ASTNode(ASTBase):
-    def __init__(self, name, children=[]):
-        super().__init__(name, type="NODE", value=None, children=children)
+    def __init__(self, name):
+        super().__init__(name, type="NODE", value=None, children=[])
 
 class ASTValue(ASTBase):
     def __init__(self, value, name=None):
