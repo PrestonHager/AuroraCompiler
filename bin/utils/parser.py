@@ -94,6 +94,8 @@ class Parser:
         elif self._parse_check("WORD", tokens, index):
             if self._find_token(tokens[index+1:index+3], "FUNCTION") == 0 and self._find_token(tokens[index+1:index+3], "EQUALS") == 0:
                 node = ASTValue(tokens[index].value, "VARIABLE")
+        elif self._parse_check("NUMBER", tokens, index):
+            node = ASTValue(tokens[index].value, "NUMBER")
         return (node, increase)
 
     def _find_token(self, tokens, token):

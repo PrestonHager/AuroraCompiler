@@ -3,8 +3,14 @@
 # for Aurora Compiler
 
 from copy import copy
+from re import compile
 
 class Lexer:
+    # some regex constants
+    number_regex = compile(r'[0-9]+')
+    float_regex = compile(r'[0-9]*\\.[0-9]+')
+    hex_number_regex = compile(r'0x[0-9]+')
+
     def __init__(self, code, bin_dir):
         """
         Creates a new Lexer instance
@@ -51,7 +57,10 @@ class Lexer:
                 if self.operations[operation] == ''.join(self.code[index:index+len(self.operations[operation])]):
                     # put the current token in the lexed_code, if there is one
                     if len(token) > 1:
-                        self.lexed_code.append(Token("WORD", ''.join(token[:-1]), token_start))
+                        if self._check_number(''.join(token[:-1])):
+                            self.lexed_code.append(Token("NUMBER", ''.join(token[:-1]), token_start))
+                        else:
+                            self.lexed_code.append(Token("WORD", ''.join(token[:-1]), token_start))
                     # put the current operation into the lexed_code
                     self.lexed_code.append(Token(operation, self.operations[operation], current_position))
                     # increase the index by the length of the operation-1
@@ -69,8 +78,20 @@ class Lexer:
             index += 1
         # if there is still a token that hasn't been added then add it
         if token != "":
-            self.lexed_code.append(Token("WORD", token, token_start))
+            if self._check_number(token):
+                self.lexed_code.append(Token("NUMBER", token, token_start))
+            else:
+                self.lexed_code.append(Token("WORD", token, token_start))
         print(self.lexed_code)
+
+    def _check_number(self, token):
+        if self.number_regex.match(token):
+            return True
+        elif self.float_regex.match(token):
+            return True
+        elif self.hex_number_regex.match(token):
+            return True
+        return False
 
 class Token:
     def __init__(self, name, value, position):
