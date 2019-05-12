@@ -39,35 +39,59 @@ class Generator:
         generated_end = ""
         if node.name == "COMMENT":
             generated += f"; {node.children[0].value.strip()}"
-        if node.name == "FUNCTION":
+        elif node.name == "FUNCTION":
             children_dict = self._children_dictionary(node)
             name = children_dict["NAME"].value
             arguments = children_dict["ARGUMENTS"].children
-            if name == "include":
-                type = arguments[0]
-                if type.name == "STRING":
-                    file = arguments[0].value
-                else:
-                    file = "_aurora_" + arguments[0].value
-                generated_end += f"%include \"{file}\"\n"
-            elif name == "_asm":
+            if name == "_asm":
                 for argument in arguments:
                     if argument.name == "STRING":
                         generated += f"{argument.value}\n"
             else:
                 generated += f"; Arguments: {arguments}\n"
+                arg_number = 0
                 for argument in arguments:
+                    arg_number += 1
                     if argument.name == "STRING":
                         var, new = self._constant("string", argument.value)
-                        generated += f"mov [_aurora_arg_buffer], _aurora_string_{var}\n"
+                        generated += f"mov [_aurora_arg_buffer+{arg_number*4}], DWORD _aurora_string_{var}\n"
                         if new:
                             generated_end += f"_aurora_string_{var} db \"{argument.value}\", 0\n"
                     if argument.name == "NUMBER":
                         var, new = self._constant("number", argument.value)
-                        generated += f"mov [_aurora_arg_buffer], _aurora_number_{var}\n"
+                        generated += f"mov [_aurora_arg_buffer+{arg_number*4}], DWORD _aurora_number_{var}\n"
                         if new:
-                            generated_end += f"_aurora_number_{var} dq {argument.value}\n"
+                            generated_end += f"_aurora_number_{var} dd {argument.value}\n"
                 generated += f"call {name}"
+        elif node.name == "FOR":
+            children_dict = self._children_dictionary(node)
+            initialization = children_dict["INITIALIZATION"]
+            condition = children_dict["CONDITION"]
+            loop = children_dict["LOOP"]
+            generated += f"; FOR: {node.children}"
+        elif node.name == "VARIABLE_DEFINITION":
+            children_dict = self._children_dictionary(node)
+            type = children_dict["TYPE"].value
+            name = children_dict["NAME"].value
+            value = children_dict["VALUE"].value
+            if type == "STRING":
+                generated_end += f"{name} db \"{value}\"\n"
+            elif type == "NUMBER":
+                generated_end += f"{name} dd {value}\n"
+        elif node.name == "FUNCTION_DEFINTION":
+            children_dict = self._children_dictionary(node)
+            name = children_dict["NAME"].value
+            parameters = children_dict["PARAMETERS"].children
+            code = children_dict["CODE"].children
+            generated += f"; {name}: {parameters}\n{name}:\n\tpusha\n"
+            for line in code:
+                generated_line = self._generate(line)
+                generated += "\t" + "\n\t".join(generated_line[0].split("\n")).strip() + "\n"
+                generated_end += generated_line[1]
+            generated += f"\t.done:\n\tpopa\n\tret\n"
+        elif node.name == "INCLUDE":
+            children_dict = self._children_dictionary(node)
+            generated_end += f"%include \"{children_dict['FILE'].value}\"\n"
         return (generated.strip()+"\n", generated_end.strip()+"\n")
 
     def _children_dictionary(self, node):

@@ -6,7 +6,7 @@ include>io;
 func greet>name::String => Void;
   print>"Hello, ";
   println>name;
-  return>Void;
+  return Void;
 end;
 
 // A function without a return type automatically returns void.
