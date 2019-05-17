@@ -3,8 +3,10 @@
 # for Aurora Compiler
 
 class ASTBase:
-    def __init__(self, name="BASE", type="NODE", value=None, children=[]):
-        self.type = type
+    type = "NODE"
+
+    def __init__(self, name="BASE", ntype="NODE", value=None, children=[]):
+        type = ntype
         self.name = name
         self.value = value
         self.children = children
@@ -31,11 +33,15 @@ class ASTBase:
         return self.__repr__()
 
 class ASTNode(ASTBase):
+    type = "NODE"
+
     def __init__(self, name):
-        super().__init__(name, type="NODE", value=None, children=[])
+        super().__init__(name, ntype="NODE", value=None, children=[])
 
 class ASTValue(ASTBase):
+    type = "VALUE"
+
     def __init__(self, value, name=None):
-        super().__init__(name, type="VALUE", value=value, children=None)
+        super().__init__(name, ntype="VALUE", value=value, children=None)
 
 __all__ = ["ASTBase", "ASTNode", "ASTValue"]

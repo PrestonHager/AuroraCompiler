@@ -5,6 +5,14 @@
 from utils.ASTTools import *
 from utils.errors import ParserError
 
+OPERATIONS = {
+    "EXPONENT": 4,
+    "TIMES": 3,
+    "DIVIDE": 3,
+    "PLUS": 2,
+    "MINUS": 2
+}
+
 class Parser:
     def __init__(self, lexer):
         """
@@ -156,9 +164,9 @@ class Parser:
                 increase += min(endline, comma)
             name_index = self._find_token(tokens[index+1:], "WORD")
             name = tokens[index+1+name_index].value
-            value = self._parse_value(tokens[index+2+name_index:index+increase])
+            value = self._parse_value(tokens[index+3+name_index:index+increase])
             if value == None:
-                value = ASTValue("0", "VALUE")
+                value = ASTValue("0", "NUMBER")
             if tokens[index-1].name == "NUMBER_KEYWORD":
                 type = "NUMBER"
             elif tokens[index-1].name == "STRING_KEYWORD":
@@ -166,7 +174,7 @@ class Parser:
             else:
                 raise ParserError(f"The variable type `{tokens[index-1].value}` is not yet supported. At {tokens[index].position[0]}, {tokens[index].position[1]}")
             node = ASTNode("VARIABLE_DEFINITION").add_child(
-                    value).add_child(
+                    ASTNode("VALUE").add_child(value)).add_child(
                     ASTValue(name, "NAME")).add_child(
                     ASTValue(type, "TYPE"))
         elif self._parse_check("END", tokens, index):
@@ -174,9 +182,43 @@ class Parser:
         return (node, increase)
 
     def _parse_value(self, tokens):
-        print(tokens)
-        node = None
-        return node
+        # We parse the value by creating a "postfix" for the original "infix".
+        operation_stack = []
+        postfix = ASTNode("POSTFIX")
+        for token in tokens:
+            print(token)
+            if token.name in OPERATIONS:
+                if len(operation_stack) > 0 and OPERATIONS[token.name] < OPERATIONS[operation_stack[-1]]:
+                    while len(operation_stack) > 0:
+                        postfix.add_child(ASTValue(None, operation_stack.pop()))
+                operation_stack.append(token.name)
+            elif token.name == "NUMBER":
+                postfix.add_child(ASTValue(token.value, "NUMBER"))
+            elif token.name == "WORD":
+                postfix.add_child(ASTValue(token.value, "VARIABLE"))
+        while len(operation_stack) > 0:
+            postfix.add_child(ASTValue(None, operation_stack.pop()))
+        return postfix
+
+    def _find_number_variable(self, tokens, index):
+        i = 1
+        value1 = tokens[index-1]
+        value2 = tokens[index+1]
+        while (value1.name != "NUMBER" or value1.name != "WORD") and (value2.name != "NUMBER" or value1.name != "WORD"):
+            i += 1
+            if value1.name != "NUMBER" and value1.name != "WORD":
+                value1 = tokens[index-i]
+            if value2.name != "NUMBER" and value2.name != "WORD":
+                value2 = tokens[index+i]
+        if value1.name == "NUMBER":
+            value1 = ASTValue(value1.value, "NUMBER")
+        else:
+            value1 = ASTValue(value1.value, "VARIABLE")
+        if value2.name == "NUMBER":
+            value2 = ASTValue(value2.value, "NUMBER")
+        else:
+            value2 = ASTValue(value2.value, "VARIABLE")
+        return (value1, value2)
 
     def _parse_parameters(self, tokens, index):
         node, increase = self._parse(tokens, index)
