@@ -33,7 +33,7 @@ class Lexer:
         # open the operations.txt file and read and put them into a dictionary.
         with open(bin_dir+"/bin/operations.txt", 'r') as f_in:
             cont = f_in.read().strip()
-        self.operations = {l.split(":=")[0].strip(): l.split(":=")[1].strip().replace("\s", " ").replace("\\n", "\n") for l in cont.split("\n")}
+        self.operations = {l.split(":=")[0].strip(): l.split(":=")[1].strip().replace("\s", " ").replace("\\n", "\n") for l in cont.split("\n") if l.strip() != ""}
         self.operations = {k: self.operations[k] for k in sorted(self.operations, key=lambda k: len(self.operations[k]), reverse=True)}
 
     def lex(self):

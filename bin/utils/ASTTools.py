@@ -27,7 +27,7 @@ class ASTBase:
             else:
                 return f"<{self.__class__.__name__}({len(self.children)}) {self.name}: {self.children}>"
         else:
-            return f"<{self.__class__.__name__} {self.name}: `{self.value}`"
+            return f"<{self.__class__.__name__} {self.name}: `{self.value}`>"
 
     def __str__(self):
         return self.__repr__()

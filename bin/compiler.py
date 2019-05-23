@@ -2,6 +2,7 @@
 # by Preston Hager
 # for Aurora Compiler
 
+# Important imports for the lexer, parser, generator, and error handling.
 from utils.lexer import *
 from utils.parser import *
 from utils.generator import *
@@ -9,6 +10,23 @@ from utils.errors import CompilerError
 
 class Compiler:
     def __init__(self, bin_dir, file=None, text=None):
+        """
+        Creates a new Compiler instance
+
+        Parameters
+        ----------
+        bin_dir : string
+            The directory of this file since it contains the utilities and libraries.
+        [file] : string
+            Path to file containing Aurora code.
+        [text] : string
+            Or pass in text instead of file path.
+
+        Returns
+        -------
+        Compiler
+            New Compiler instance with previous parameters.
+        """
         if file != None:
             with open(file, 'r') as f_in:
                 code = f_in.read()
@@ -42,6 +60,9 @@ class Compiler:
         # print(self.generator.generated_code)
 
     def run(self):
+        """
+        Run the compiler to tokenize, parse, and then generate code.
+        """
         try:
             self._run()
             self.success = True
@@ -51,6 +72,14 @@ class Compiler:
             raise err
 
     def save(self, filename):
+        """
+        Save the generated code at a given filepath.
+
+        Parameters
+        ----------
+        filename : string
+            Path or filename of the saved file with generated code.
+        """
         if self.success:
             print(f"Saving under '{filename}'.")
             with open(filename, 'w') as f_out:
@@ -59,6 +88,17 @@ class Compiler:
             raise CompilerError("No successful compilation to save.")
 
     def assemble(self, filename, output=None):
+        """
+        Assemble the generated code into binary bytecode.
+        NOTE: Requires NASM
+
+        Parameters
+        ----------
+        filename : string
+            File to take the assembly code from.
+        [output] : string
+            File to save the bytecode to, if not given it defaults to `filename.bin`.
+        """
         if self.success:
             if output == None:
                 output = '.'.join(filename.split(".")[:-1])+".bin"
@@ -68,22 +108,31 @@ class Compiler:
             raise CompilerError("No successful compilation to assemble.")
 
 if __name__ == '__main__':
+    # Also probably important imports.
     import os
     import plum
     import sys
+    # look for the filename, if it isn't given then we've run into a road-block.
     if len(sys.argv) <= 1:
         print("Missing input file.")
         exit()
+    # take the filename and split the path to create a build directory.
     filename = sys.argv[1]
     filepath = os.path.split(filename)
     build_dir = os.path.join(*filepath[:-1], "build")
+    # oh, yeah, check to see if that directory exists, if not then create it.
     if not os.path.exists(build_dir):
         os.makedirs(build_dir)
+    # we have to have some place to save the file right?
     outloc = os.path.join(*filepath[:-1], ''.join(filepath[-1].split(".")[:-1]))
     bin_dir = os.path.join(*os.path.split(os.path.dirname(os.path.abspath(__file__)))[:-1])
+    # these are arguments that are passed in through the command line. This is just fancy code.
     args = plum.get_args({"output": ["-o", "--out"]}, {"output": plum.String(outloc)})
+    # Now we get to have fun and create the compiler.
     compiler = Compiler(bin_dir, file=filename)
+    # and run it. who decided to structure the code like this?
     compiler.run()
+    # check to see if it was actually successful before we try to do stuff to it.
     if compiler.success:
         compiler.save(args["output"]+".asm")
         # compiler.assemble(args["output"]+".asm", args["output"]+".bin")

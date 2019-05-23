@@ -86,11 +86,10 @@ class Generator:
                     generated_end += f"{name} db \"{value}\"\n"
             elif type == "NUMBER":
                 value = self._generate_value(children_dict["VALUE"].children[0])
-                if name in self.variables["number"]:
-                    gen_value = value
-                    generated += f"{gen_value[0].strip()}\nmov [{name}], eax\n"
-                    generated_end == gen_value[1]
-                else:
+                gen_value = value
+                generated += f"{gen_value[0].strip()}\nmov [{name}], eax\n"
+                generated_end == gen_value[1]
+                if name not in self.variables["number"]:
                     self.variables["number"].append(name)
                     generated_end += f"{name} dd 0\n"
         elif node.name == "FUNCTION_DEFINTION":
@@ -104,6 +103,17 @@ class Generator:
                 generated += "\t" + "\n\t".join(generated_line[0].split("\n")).strip() + "\n"
                 generated_end += generated_line[1]
             generated += f"\t.done:\n\tpopa\n\tret\n"
+        elif node.name == "VARIABLE_ASSIGNMENT":
+            children_dict = self._children_dictionary(node)
+            variable_dict = self._children_dictionary(children_dict["VARIABLE"])
+            name = variable_dict["NAME"].value
+            size = children_dict["SIZE"].value
+            print(size)
+            value = self._generate_value(children_dict["VALUE"].children[0])[0]
+            if variable_dict["POINTER"].value:
+                generated += f"{value.strip()}\nmov edx, [{name}]\nmov [edx], {self._generate_register('a', size)}\n"
+            else:
+                generated += f"{value.strip()}\nmov [{name}], {a_reg}\n"
         elif node.name == "INCLUDE":
             children_dict = self._children_dictionary(node)
             generated_end += f"%include \"{children_dict['FILE'].value}\"\n"
@@ -113,9 +123,8 @@ class Generator:
         value = ""
         generated_end = ""
         number_stack = []
-        print(postfix)
         for node in postfix.children:
-            if node.name == "NUMBER" or node.name == "VARIABLE":
+            if node.name == "NUMBER" or node.name == "VARIABLE" or node.name == "FUNCTION":
                 number_stack.append(node)
             else:
                 if value == "":
@@ -123,17 +132,32 @@ class Generator:
                     generated_end += gen_var[1]
                     value += f"mov eax, {gen_var[0]}\n"
                 if node.name == "TIMES":
-                    gen_var = self._generate_variable(number_stack.pop())
+                    last_number = number_stack.pop()
+                    gen_var = self._generate_variable(last_number)
+                    if last_number.name == "FUNCTION":
+                        generated_end += gen_var[1]
                     value += f"mov ebx, {gen_var[0]}\nmul ebx\n"
                 elif node.name == "DIVIDE":
-                    gen_var = self._generate_variable(number_stack.pop())
+                    last_number = number_stack.pop()
+                    gen_var = self._generate_variable(last_number)
+                    if last_number.name == "FUNCTION":
+                        generated_end += gen_var[1]
                     value += f"mov ebx, {gen_var[0]}\n"
                 elif node.name == "PLUS":
-                    gen_var = self._generate_variable(number_stack.pop())
+                    last_number = number_stack.pop()
+                    gen_var = self._generate_variable(last_number)
+                    if last_number.name == "FUNCTION":
+                        generated_end += gen_var[1]
                     value += f"mov ebx, {gen_var[0]}\nadd eax, ebx\n"
                 elif node.name == "MINUS":
-                    gen_var = self._generate_variable(number_stack.pop())
+                    last_number = number_stack.pop()
+                    gen_var = self._generate_variable(last_number)
+                    if last_number.name == "FUNCTION":
+                        generated_end += gen_var[1]
                     value += f"mov ebx, {gen_var[0]}\nsub eax, ebx\n"
+        if value == "" and len(number_stack) > 0:
+            gen_var = self._generate_variable(number_stack.pop())
+            value += f"mov eax, {gen_var[0]}\n"
         return (value, generated_end)
 
     def _generate_variable(self, variable):
@@ -143,8 +167,27 @@ class Generator:
             return (f"[{variable.value}]", "")
         elif variable.name == "NUMBER":
             return (f"{variable.value}", "")
+        elif variable.name == "FUNCTION":
+            return self._generate(variable)
         else:
             raise ValueError
+
+    def _generate_register(self, register, size="DOUBLE_WORD"):
+        if size == "DOUBLE_WORD":
+            if register in ["a", "b", "c", "d"]:
+                return "e"+register+"x"
+            elif register in ["si", "sp", "ds", "cs", "es"]:
+                return "e"+register
+        elif size == "WORD":
+            if register in ["a", "b", "c", "d"]:
+                return register+"x"
+            elif register in ["si", "sp", "ds", "cs", "es"]:
+                return register
+        elif size == "BYTE":
+            if register in ["a", "b", "c", "d"]:
+                return register+"l"
+            elif register in ["si", "sp", "ds", "cs", "es"]:
+                raise ValueError
 
     def _children_dictionary(self, node):
         children_dictionary = {}
