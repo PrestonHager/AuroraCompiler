@@ -119,12 +119,12 @@ if __name__ == '__main__':
     # take the filename and split the path to create a build directory.
     filename = sys.argv[1]
     filepath = os.path.split(filename)
-    build_dir = os.path.join(*filepath[:-1], "build")
+    build_dir = os.path.join(*filepath[:-1], "aurora")
     # oh, yeah, check to see if that directory exists, if not then create it.
     if not os.path.exists(build_dir):
-        os.makedirs(build_dir)
+        os.makedirs(build_dir, mode=0o777)
     # we have to have some place to save the file right?
-    outloc = os.path.join(*filepath[:-1], ''.join(filepath[-1].split(".")[:-1]))
+    outloc = os.path.join(*filepath[:-1], "aurora", ''.join(filepath[-1].split(".")[:-1]))
     bin_dir = os.path.join(*os.path.split(os.path.dirname(os.path.abspath(__file__)))[:-1])
     # these are arguments that are passed in through the command line. This is just fancy code.
     args = plum.get_args({"output": ["-o", "--out"]}, {"output": plum.String(outloc)})
