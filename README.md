@@ -4,11 +4,6 @@ Aurora is a simple language aimed towards low level implementation with readabil
 It was made for practice with compilers, and for an IT class.
 Later it was adopted for [Startaste][5], an OS developed by I, [Preston Hager][4].
 
-## PLEASE NOTE
-
-This project is currently overgoing a major rehaul.
-Don't expect anything to be complete yet, as it is being completely rewriten.
-
 ## Current Progress
 
 The following is a list of what has been completed, what is being worked on, and what is planned in the future.
@@ -17,21 +12,29 @@ Items in plain text are in progress.
 Items in *italics* are planned.
 
 * **Lexer**
-* **Parser**
+* Parser
 * Generator
 * Syntax
-  - Variable Definitions
+  - **Variable Definitions**
   - **Function Calls**
   - **Includes**
   - Builtin Libraries
   - *Math Operations*
-  - *Function Definitions*
+  - **Function Definitions**
   - *Lists*
   - *Comparisons*
 * *Error Handling*
-* *Strong Variable Typing*
+* Strong Variable Typing
 
 ## Getting Started
+
+First, to make it easier to compiler files, install the `aurora` command.
+To do this add it to the PATH environment variables.
+Please note, you must be in the AuroraCompiler directory to do this.
+Use the following command to do this:
+```
+export PATH=$PATH:$(pwd)/bin
+```
 
 Aurora compiler can be run using:
 
