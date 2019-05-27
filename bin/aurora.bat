@@ -6,4 +6,4 @@ for %%a in (%*) do (
   set /A argCount+=1
 )
 
-if %argCount% LSS 1 (echo "Usage: aurora [filename] [optional flags]") else (python %~dp0compiler.py %1 %args%)
+if %argCount% LSS 1 (echo "Usage: aurora [filename] [optional flags]") else (python3 %~dp0compiler.py %1 %args%)
