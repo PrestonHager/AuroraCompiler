@@ -9,7 +9,7 @@ from utils.generator import *
 from utils.errors import CompilerError
 
 class Compiler:
-    def __init__(self, bin_dir, file=None, text=None):
+    def __init__(self, bin_dir, extra, file=None, text=None):
         """
         Creates a new Compiler instance
 
@@ -35,7 +35,7 @@ class Compiler:
         else:
             raise Exception("No code input found. Please supply either a file or text.")
         self.lexer = Lexer(code, bin_dir)
-        self.parser = Parser(self.lexer)
+        self.parser = Parser(self.lexer, extra)
         self.generator = Generator(self.parser)
         self.success = False
 
@@ -122,14 +122,14 @@ if __name__ == '__main__':
     build_dir = os.path.join(*filepath[:-1], "aurora")
     # oh, yeah, check to see if that directory exists, if not then create it.
     if not os.path.exists(build_dir):
-        os.makedirs(build_dir, mode=0o777)
+        os.makedirs(build_dir)
     # we have to have some place to save the file right?
     outloc = os.path.join(*filepath[:-1], "aurora", ''.join(filepath[-1].split(".")[:-1]))
-    bin_dir = os.path.join(*os.path.split(os.path.dirname(os.path.abspath(__file__)))[:-1])
+    bin_dir = os.path.join(*os.path.split(os.path.dirname(os.path.abspath(__file__))))
     # these are arguments that are passed in through the command line. This is just fancy code.
-    args = plum.get_args({"output": ["-o", "--out"]}, {"output": plum.String(outloc)})
+    args = plum.get_args({"output": ["-o", "--out"], "freestanding": ["--freestanding", "-fs"]}, {"output": plum.String(outloc)})
     # Now we get to have fun and create the compiler.
-    compiler = Compiler(bin_dir, file=filename)
+    compiler = Compiler(bin_dir, args, file=filename)
     # and run it. who decided to structure the code like this?
     compiler.run()
     # check to see if it was actually successful before we try to do stuff to it.

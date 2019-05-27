@@ -3,6 +3,8 @@
 # for Aurora Compiler
 
 # Probably also important imports.
+import os
+import shutil
 from utils.ASTTools import *
 from utils.errors import ParserError
 
@@ -16,7 +18,7 @@ OPERATIONS = {
 }
 
 class Parser:
-    def __init__(self, lexer):
+    def __init__(self, lexer, extra):
         """
         Creates a new Parser instance
 
@@ -31,6 +33,7 @@ class Parser:
             New Parser instance with previous parameters.
         """
         self.lexer = lexer
+        self.extra = extra
         self.ast = ASTBase()
 
     def parse(self):
@@ -57,7 +60,7 @@ class Parser:
         self.ast.add_children(*nodes+definition_nodes)
         # check the ast for any parser errors, i.e. undefined variables
         self._check(self.ast)
-        print(self.ast) # debug
+        # print(self.ast) # debug
 
     def _parse(self, tokens, index):
         # the return variables are set to the default.
@@ -119,8 +122,13 @@ class Parser:
                     # the file to include is "homemade" if it is a string, and a standard library if it's just a word.
                     if arguments[0].name == "STRING":
                         file = arguments[0].value + ".asm"
+                    elif self.extra["freestanding"]:
+                        if not os.path.exists(os.path.join("aurora", "libraries")):
+                            os.makedirs(os.path.join("aurora", "libraries"))
+                        shutil.copy(os.path.join(self.lexer.bin_dir, "libraries", "_aurora_" + arguments[0].value + ".asm"), os.path.join("aurora", "libraries", "_aurora_" + arguments[0].value + ".asm"))
+                        file = os.path.join("libraries", "_aurora_" + arguments[0].value + ".asm")
                     else:
-                        file = "_aurora_" + arguments[0].value + ".asm"
+                        file = os.path.join(self.lexer.bin_dir, "libraries", "_aurora_" + arguments[0].value + ".asm")
                     node = ASTNode("INCLUDE").add_child(
                             ASTValue(file, "FILE")).add_child(
                             ASTValue(name, "NAME"))
@@ -203,7 +211,6 @@ class Parser:
                 if size_index > 0:
                     size = ASTValue(s, "SIZE")
             value = self._parse_value(tokens[index+1+size_index:index+endline+1])[0]
-            print(name, value, size)
             node = ASTNode("VARIABLE_ASSIGNMENT").add_child(
                     size).add_child(
                     ASTNode("VALUE").add_child(value)).add_child(

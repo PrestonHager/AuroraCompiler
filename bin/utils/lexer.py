@@ -27,11 +27,13 @@ class Lexer:
         Lexer
             New Lexer instance with previous parameters.
         """
+        # Store the bin_dir for the Parser cuz we're nice ;)
+        self.bin_dir = bin_dir
         # Define class variables
         self.code = code.strip()+"\n"
         self.lexed_code = []
         # open the operations.txt file and read and put them into a dictionary.
-        with open(bin_dir+"/bin/operations.txt", 'r') as f_in:
+        with open(bin_dir+"/operations.txt", 'r') as f_in:
             cont = f_in.read().strip()
         self.operations = {l.split(":=")[0].strip(): l.split(":=")[1].strip().replace("\s", " ").replace("\\n", "\n") for l in cont.split("\n") if l.strip() != ""}
         self.operations = {k: self.operations[k] for k in sorted(self.operations, key=lambda k: len(self.operations[k]), reverse=True)}
@@ -82,7 +84,6 @@ class Lexer:
                 self.lexed_code.append(Token("NUMBER", token, token_start))
             else:
                 self.lexed_code.append(Token("WORD", token, token_start))
-        print(self.lexed_code)
 
     def _check_number(self, token):
         if self.number_regex.match(token):
