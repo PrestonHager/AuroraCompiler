@@ -17,12 +17,14 @@ The output is assembly code that can be assembled using something like NASM.
 
 Input:
 
-<ASTNode(l) FUNCTION: [
-  <ASTValue NAME: "print">,
-  <ASTNode(1) ARGUMENTS: [
-    <ASTValue STRING: "Somewhere over the rainbow!">
-  ]>
-]>
+.. code:
+
+    <ASTNode(l) FUNCTION: [
+      <ASTValue NAME: "print">,
+      <ASTNode(1) ARGUMENTS: [
+        <ASTValue STRING: "Somewhere over the rainbow!">
+      ]>
+    ]>
 
 Output:
 

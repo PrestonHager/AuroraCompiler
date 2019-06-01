@@ -52,7 +52,11 @@ Output:
 +-------------------+-------------------------------+-----------+
 | WORD              | rainbow!                      | 1  26     |
 +-------------------+-------------------------------+-----------+
-| END_STRING_DEF    | "                             | 1, 34    |
+| END_STRING_DEF    | "                             | 1, 34     |
 +-------------------+-------------------------------+-----------+
-| ENDLINE           | ;                             | 1, 35    |
+| ENDLINE           | ;                             | 1, 35     |
 +-------------------+-------------------------------+-----------+
+
+
+.. _Parser page: https://auroracompiler.rtfd.io/en/latest/parser.html
+.. _Syntax page: https://auroracompiler.rtfd.io/en/latest/syntax.html

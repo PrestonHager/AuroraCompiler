@@ -50,9 +50,11 @@ Input:
 
 Output:
 
-<ASTNode(l) FUNCTION: [
-  <ASTValue NAME: "print">,
-  <ASTNode(1) ARGUMENTS: [
-    <ASTValue STRING: "Somewhere over the rainbow!">
-  ]>
-]>
+.. code:
+
+    <ASTNode(l) FUNCTION: [
+      <ASTValue NAME: "print">,
+      <ASTNode(1) ARGUMENTS: [
+        <ASTValue STRING: "Somewhere over the rainbow!">
+      ]>
+    ]>
