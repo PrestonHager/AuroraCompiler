@@ -26,7 +26,9 @@ COMMA := ,
 
 EQUALS := =
 PLUS_EQUALS := +=
+PLUS_EQUALS_ONE := ++
 MINUS_EQUALS := -=
+MINUS_EQUALS_ONE := --
 
 TIMES := *
 EXPONENT := **

@@ -7,15 +7,7 @@ import os
 import shutil
 from utils.ASTTools import *
 from utils.errors import ParserError
-
-# These are for the infix to postfix thing.
-OPERATIONS = {
-    "EXPONENT": 4,
-    "TIMES": 3,
-    "DIVIDE": 3,
-    "PLUS": 2,
-    "MINUS": 2
-}
+from utils.constants import OPERATIONS
 
 class Parser:
     def __init__(self, lexer, extra):
@@ -34,7 +26,8 @@ class Parser:
         """
         self.lexer = lexer
         self.extra = extra
-        self.ast = ASTBase()
+        self.dependencies = []
+        self.ast = ASTBase(children=[])
 
     def parse(self):
         """
@@ -90,21 +83,32 @@ class Parser:
                     if node != None:
                         for_nodes.append(node)
                     i += add
+                # if the list of arguments is less than three then it's not a valid for loop.
+                if len(for_nodes) < 3:
+                    raise ParserError(f"Invalid for loop, perhaps you added a `;` instead of a `,`. At {tokens[index].position[0]}, {tokens[index].position[1]}")
                 # test to see if the next token is a `then`, if it is then we parse the code until an `end`, otherwise it's just one line that we parse for the for loop.
                 if self._find_token(tokens[index+increase:index+increase+2], "THEN"):
                     # parse until the end token
-                    increase += self._find_token(tokens[index+increase:], "END")+1
-                    parse_until = "END"
+                    parse_until = self._find_token(tokens[index+increase:], "END")+1
                 else:
                     # parse just until the next endline
-                    increase += self._find_token(tokens[index+increase:], "ENDLINE")
-                    parse_until = "ENDLINE"
+                    parse_until = self._find_token(tokens[index+increase:], "ENDLINE")+1
+                # parse all the code, actually. This is very similar to parsing for arguments.
+                code_nodes = []
+                code_tokens = tokens[index+increase:index+increase+parse_until]
+                i = 0
+                while i < len(code_tokens):
+                    node, add = self._parse(code_tokens, i)
+                    if node != None:
+                        code_nodes.append(node)
+                    i += add
                 # TODO: add node for for loop.
+                increase += parse_until
                 node = ASTNode("FOR").add_child(
                         ASTNode("INITIALIZATION").add_child(for_nodes[0])).add_child(
                         ASTNode("CONDITION").add_child(for_nodes[1])).add_child(
                         ASTNode("LOOP").add_child(for_nodes[2])).add_child(
-                        ASTNode("CODE"))
+                        ASTNode("CODE").add_children(*code_nodes))
             # if the function isn't a function then we do normal function stuff.
             else:
                 # find the arguments of the function.
@@ -122,11 +126,12 @@ class Parser:
                     # the file to include is "homemade" if it is a string, and a standard library if it's just a word.
                     if arguments[0].name == "STRING":
                         file = arguments[0].value + ".asm"
+                        self.dependencies.append([arguments[0].value + ".aurora", file])
                     elif self.extra["freestanding"]:
                         if not os.path.exists(os.path.join("aurora", "libraries")):
                             os.makedirs(os.path.join("aurora", "libraries"))
                         shutil.copy(os.path.join(self.lexer.bin_dir, "libraries", "_aurora_" + arguments[0].value + ".asm"), os.path.join("aurora", "libraries", "_aurora_" + arguments[0].value + ".asm"))
-                        file = os.path.join("libraries", "_aurora_" + arguments[0].value + ".asm")
+                        file = os.path.join("aurora", "libraries", "_aurora_" + arguments[0].value + ".asm")
                     else:
                         file = os.path.join(self.lexer.bin_dir, "libraries", "_aurora_" + arguments[0].value + ".asm")
                     node = ASTNode("INCLUDE").add_child(
@@ -192,41 +197,63 @@ class Parser:
                     ASTValue(type, "TYPE"))
         # check for a variable assignment (i.e. EQUALS, PLUS_EQUALS, and MINUS_EQUALS).
         elif self._parse_check("EQUALS", tokens, index):
-            pointer = False
-            endline = self._find_token(tokens[index+1:], "ENDLINE")+1
-            increase = endline
-            if self._find_token(tokens[index-3:index], "POINTER_END"):
-                name_index = self._find_token(tokens[index-5:index], "WORD")
-                name = tokens[index-5+name_index].value
-                pointer = True
-            else:
-                name_index = self._find_token(tokens[index-2:index], "WORD")
-                name = tokens[index-2+name_index].value
-            # before parsing the value we must check for the `byte`, `word`, and `dword` keywords.
-            # if one of these is found then that size must be maintained when assignning the value to the variable.
-            # to do this we add an ASTNode in the `node` which says "SIZE" is `byte`, `word`, or `dword`.
-            size = ASTValue("DOUBLE_WORD", "SIZE")
-            for s in ["BYTE", "WORD", "DOUBLE_WORD"]:
-                size_index = self._find_token(tokens[index+1:], s+"_KEYWORD")
-                if size_index > 0:
-                    size = ASTValue(s, "SIZE")
-            value = self._parse_value(tokens[index+1+size_index:index+endline+1])[0]
-            node = ASTNode("VARIABLE_ASSIGNMENT").add_child(
-                    size).add_child(
-                    ASTNode("VALUE").add_child(value)).add_child(
-                    ASTNode("VARIABLE").add_child(
-                        ASTValue(name, "NAME")).add_child(
-                        ASTValue(pointer, "POINTER"))
-                    )
+            node, increase = self._variable_assignment(tokens, index, increase)
+        elif self._parse_check("PLUS_EQUALS", tokens, index):
+            node, increase = self._variable_assignment(tokens, index, increase, "PLUS", False, False)
+        elif self._parse_check("PLUS_EQUALS_ONE", tokens, index):
+            node, increase = self._variable_assignment(tokens, index, increase, "PLUS", False, True)
+        elif self._parse_check("MINUS_EQUALS", tokens, index):
+            node, increase = self._variable_assignment(tokens, index, increase, "MINUS", False, False)
+        elif self._parse_check("MINUS_EQUALS_ONE", tokens, index):
+            node, increase = self._variable_assignment(tokens, index, increase, "MINUS", False, True)
+        # TODO: add the plus_equals, minus_equals, minus_equals_one tokens here
         elif self._parse_check("END", tokens, index):
             node = ASTNode("END")
+        return (node, increase)
+
+    def _variable_assignment(self, tokens, index, increase, operation=None, is_equals=True, is_one=False):
+        pointer = False
+        endline = self._find_token(tokens[index+1:], "ENDLINE")+1
+        increase = endline
+        if self._find_token(tokens[index-3:index], "POINTER_END"):
+            name_index = self._find_token(tokens[index-5:index], "WORD")
+            name = tokens[index-5+name_index].value
+            pointer = True
+        else:
+            name_index = self._find_token(tokens[index-2:index], "WORD")
+            name = tokens[index-2+name_index].value
+        # before parsing the value we must check for the `byte`, `word`, and `dword` keywords.
+        # if one of these is found then that size must be maintained when assignning the value to the variable.
+        # to do this we add an ASTNode in the `node` which says "SIZE" is `byte`, `word`, or `dword`.
+        size = ASTValue("DOUBLE_WORD", "SIZE")
+        for s in ["BYTE", "WORD", "DOUBLE_WORD"]:
+            size_index = self._find_token(tokens[index+1:], s+"_KEYWORD")
+            if size_index > 0:
+                size = ASTValue(s, "SIZE")
+        if not is_equals and is_one:
+            value = ASTNode("POSTFIX").add_children(
+                    ASTValue(name, "VARIABLE"), ASTValue("1", "NUMBER"), ASTValue(None, operation))
+        elif not is_equals and not is_one:
+            value = ASTNode("POSTFIX").add_child(
+                    ASTValue(name, "VARIABLE")).add_children(
+                    *self._parse_value(tokens[index+1+size_index:index+endline+1])[0].children).add_child(
+                    ASTValue(None, operation))
+        else:
+            value = self._parse_value(tokens[index+1+size_index:index+endline+1])[0]
+        node = ASTNode("VARIABLE_ASSIGNMENT").add_child(
+                size).add_child(
+                ASTNode("VALUE").add_child(value)).add_child(
+                ASTNode("VARIABLE").add_child(
+                    ASTValue(name, "NAME")).add_child(
+                    ASTValue(pointer, "POINTER"))
+                )
         return (node, increase)
 
     def _parse_value(self, tokens, index=0):
         # We parse the value by creating a "postfix" for the original "infix".
         operation_stack = []
         postfix = ASTNode("POSTFIX")
-        while index < len(tokens) and tokens[index].name != "GROUP_END":
+        while index < len(tokens) and not (tokens[index].name == "GROUP_END" or tokens[index].name == "COMMA" or tokens[index].name == "ENDLINE"):
             token = tokens[index]
             index += 1
             if token.name in OPERATIONS:
@@ -298,6 +325,11 @@ class Parser:
     def _parse_arguments(self, tokens, index):
         # first parse the normal tokens
         node, increase = self._parse(tokens, index)
+        # the _parse function will always look at the `;` token for the increase variable.
+        # we must look for a comma first and then go with the endline token.
+        comma = self._find_token(tokens[index:index+increase], "COMMA")
+        if comma != 0:
+            increase = comma
         # if the values aren't the default then return otherwise just continue.
         if node != None:
             return (node, increase)
@@ -309,8 +341,26 @@ class Parser:
             for token in tokens[index+1:index+string_end+1]:
                 string += token.value
             node = ASTValue(string, "STRING")
+        elif self._find_test_tokens(tokens[index:index+2]):
+            test_token = self._find_test_tokens(tokens[index:index+2])
+            increase = min([i for i in [self._find_token(tokens[index+2:], "COMMA"), self._find_token(tokens[index+2:], "ENDLINE")] if i != 0])
+            last_argument = index
+            while last_argument > 0:
+                if tokens[last_argument].name == "COMMA":
+                    last_argument += 1
+                    break
+                last_argument -= 1
+            parsed_value1 = self._parse_value(tokens[last_argument:index+test_token])
+            parsed_value2 = self._parse_value(tokens[index+test_token:])
+            value1 = parsed_value1[0]
+            value2 = parsed_value2[0]
+            increase += parsed_value1[1] + parsed_value2[1]
+            node = ASTNode("COMPARISON").add_child(
+                    ASTValue(tokens[index+test_token].name, "TEST")).add_child(
+                    ASTNode("VALUE_1").add_child(value1)).add_child(
+                    ASTNode("VALUE_2").add_child(value2))
         elif self._parse_check("WORD", tokens, index):
-            if self._find_token(tokens[index+1:index+3], "FUNCTION") == 0 and self._find_token(tokens[index+1:index+3], "EQUALS") == 0:
+            if self._find_token(tokens[index:index+1], "FUNCTION") == 0 and self._find_test_tokens(tokens[index:index+2]) == 0 and self._find_variable_assignment_tokens(tokens[index:index+2]) == 0:
                 node = ASTValue(tokens[index].value, "VARIABLE")
         elif self._parse_check("NUMBER", tokens, index):
             node = ASTValue(tokens[index].value, "NUMBER")
@@ -323,6 +373,25 @@ class Parser:
                 index = i
                 break
         return index
+
+    def _find_test_tokens(self, tokens):
+        equals_test = self._find_token(tokens, "EQUALS_TEST")
+        not_equals_test = self._find_token(tokens, "NOT_EQUAL_TEST")
+        less_than_test = self._find_token(tokens, "LESS_THAN_TEST")
+        great_than_test = self._find_token(tokens, "GREATER_THAN_TEST")
+        less_than_equal_test = self._find_token(tokens, "LESS_THAN_EQUAL_TEST")
+        greater_than_equal_test = self._find_token(tokens, "GREATER_THAN_EQUAL_TEST")
+        non_zero = [i for i in [equals_test, not_equals_test, less_than_test, great_than_test, less_than_test, greater_than_equal_test] if i != 0]
+        return min(non_zero) if len(non_zero) > 0 else 0
+
+    def _find_variable_assignment_tokens(self, tokens):
+        equals = self._find_token(tokens, "EQUALS")
+        plus_equals = self._find_token(tokens, "PLUS_EQUALS")
+        plus_equals_one = self._find_token(tokens, "PLUS_EQUALS_ONE")
+        minus_equals = self._find_token(tokens, "MINUS_EQUALS")
+        minus_equals_one = self._find_token(tokens, "MINUS_EQUALS_ONE")
+        non_zero = [i for i in [equals, plus_equals, plus_equals_one, minus_equals, minus_equals_one] if i != 0]
+        return min(non_zero) if len(non_zero) > 0 else 0
 
     def _find_function_end(self, tokens):
         # increase the index until the end of the line, or the end of the function token (end of function either way).
