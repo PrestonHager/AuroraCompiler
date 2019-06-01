@@ -6,6 +6,7 @@ RETURN := return
 PARAMETER := ::
 FUNCTION := >
 FUNCTION_END := <
+COMMENT := //
 
 STRING_KEYWORD := String
 NUMBER_KEYWORD := Number
@@ -36,7 +37,6 @@ DIVIDE := /
 PLUS := +
 MINUS := -
 DOT := .
-COMMENT := //
 
 EQUALS_TEST := ?=
 NOT_EQUAL_TEST := ?!=

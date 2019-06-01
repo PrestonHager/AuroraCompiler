@@ -3,7 +3,7 @@ Table of Contents
 
 .. toctree::
     :maxdepth: 2
-    
+
     intro
     plan
     lexer
@@ -14,4 +14,4 @@ Table of Contents
     syntax
     libraries
     io_library
-    math_library
+    string_library

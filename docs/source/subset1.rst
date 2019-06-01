@@ -4,29 +4,33 @@ Subset 1
 The first subset of the Aurora Language. The following will describe
 what it includes, and what the end goal of the subset is. The first
 subset is simply a way of measuring when part of the compiler is
-finished. It includes all the functions that will be compilable within
+finished. It includes all the functions that will be compile-abled within
 the first subset. Future subsets will be describe as the language
-developes further.
+develops further.
 
 Features
 ~~~~~~~~
 
-The first subset will include function calls. And one variable definition.
+The first subset will include function calls. Includes, A.K.A. imports.
+And variable definitions for numbers and strings.
 
-Any call to any function name can be called. The first one however, will
-be the ``print`` statement.
+Any call to any function name can be called. This is really the base of
+Aurora. Just specify the function name, use the ``>`` character, and
+follow it with any arguments passed to the function. A function is closed
+by either the ``<`` or ``;`` tokens. For example the following will call
+a function called ``greet`` with an argument of ``"Aurora"``:
+``greet>"Aurora";``. This does the same: ``greet>"Aurora"<;``.
 
-Secondly variable definitions of strings will be possible. This means
+Thirdly variable definitions of strings will be possible. This means
 that variables with the content of a string may be defined, and called
 upon. For example if the variable ``String: hello = "Salutations to you!";``
 may be defined and then later called with ``println>hello;``. This will
 in turn print the line ``Salutations to you!`` with a newline at the end.
 
-There will also be three predefined functions that may be called. The
-first is the include function, syntax is as follows, ``include>[library];``.
-For example if using, ``include>io;`` then any code that follows will
-be able to use any I/O functions. I/O functions are also included in
-this subset, they are ``print`` and ``println``. They do as described,
-and more can be found on the `Syntax`_ page.
+Number variables are another variable that can be defined. This can be
+done by specifying the ``Number`` variable. For example, ``Number: age = 15;``
+will define a variable named ``age`` with a value of ``15``.
+
+More on specific syntaxes can by found on the `Syntax`_ page.
 
 .. _Syntax: http://auroracompiler.rtfd.io/en/latest/syntax.html

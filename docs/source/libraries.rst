@@ -15,8 +15,8 @@ The following is a list of predefined libraries, their purpose, and
 short list of their functions. More for each library can be found in
 their documentation.
 
-+ `I/O`_ Library - used for input and output operations. ``print``, ``println``.
-+ `Math`_ Library - used for higher level math operations. ``sqrt``, ``round``, ``pow``, ``fib``, ``abs``.
++ `I/O`_ Library - used for input and output operations. ``io_in``, ``io_out``.
++ `String`_ Library - used for string operations. ``ascii``, ``len``.
 
 User Libraries
 ~~~~~~~~~~~~~~
@@ -25,7 +25,7 @@ A programmer may also define their own library for use in local code.
 To create a library, a folder with the library name must be present.
 For example if the library ``greetings`` was to be defined then a
 folder with the name ``greetings`` will be created. The folder must
-be located in the ``libraries/user`` folder of the aurora installation
+be located in the ``bin/libraries`` folder of the aurora installation
 directory. The ``greetings`` folder must contain an ``config.json`` file
 and any functions defined in the library in one or more files. The config
 file will contain configurations for each function, what file they're in,
@@ -35,18 +35,18 @@ and what the call name is. The following might be an example of the
 .. code::
 
     {
-    "bye": {
+      "bye": {
         "file": "farewells.aurora",
         "function": "bye"
-    },
-    "hi": {
+      },
+      "hi": {
         "file": "salutations.aurora",
         "function": "hi"
-    },
-    "hello": {
+      },
+      "hello": {
         "file": "salutations.aurora",
         "function": "hello"
-    }
+      }
     }
 
 The functions are usually in in alphabetical order. The structure could
@@ -67,7 +67,7 @@ The ``salutations.aurora`` file then might look like so:
 
     include>io;
 
-    func: hello>String name => Void;
+    func: hello>String name;
         print>"Hello, ";
         print>name;
         println>"!";
@@ -83,7 +83,7 @@ And the ``farewells.aurora`` file might look as follows:
 
     include>io;
 
-    func: bye>String name => Void;
+    func: bye>String name;
         print>"Good bye, ";
         print>name;
         println>".";
@@ -96,9 +96,9 @@ Community Libraries
 ~~~~~~~~~~~~~~~~~~~
 
 The community can also put together libraries. To install on of these
-download the library and put it in the ``libraries/user`` folder like
+download the library and put it in the ``bin/libraries`` folder like
 you would if you were creating a library. Then you can use any of those
 functions in your aurora files after including them.
 
 .. _I/O: http://auroracompiler.rtfd.io/en/latest/io_library.html
-.. _Math: http://auroracompiler.rtfd.io/en/latest/math_library.html
+.. _String: http://auroracompiler.rtfd.io/en/latest/string_library.html

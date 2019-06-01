@@ -20,14 +20,13 @@
 # -- Project information -----------------------------------------------------
 
 project = 'Aurora Compiler'
-copyright = '2018, Preston Hager'
+copyright = '2018-2019, Preston Hager'
 author = 'Preston Hager'
 
 # The short X.Y version
-version = '0.0.1'
+version = '0.1.0'
 # The full version, including alpha/beta/rc tags
-release = 'alpha-0.0.1'
-
+release = 'alpha-0.1.0'
 
 # -- General configuration ---------------------------------------------------
 
