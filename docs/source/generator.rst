@@ -17,7 +17,7 @@ The output is assembly code that can be assembled using something like NASM.
 
 Input:
 
-.. code:
+.. code::
 
     <ASTNode(l) FUNCTION: [
       <ASTValue NAME: "print">,
