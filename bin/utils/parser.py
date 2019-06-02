@@ -341,32 +341,39 @@ class Parser:
             for token in tokens[index+1:index+string_end+1]:
                 string += token.value
             node = ASTValue(string, "STRING")
-        elif self._find_test_tokens(tokens[index:index+2]):
-            test_token = self._find_test_tokens(tokens[index:index+2])
-            increase = min([i for i in [self._find_token(tokens[index+2:], "COMMA"), self._find_token(tokens[index+2:], "ENDLINE")] if i != 0])
+        # try to find a test token, these are prefixed with ? and are comparisons.
+        # the reason we include the token before index, is because if the test returns 0, the parser thinks it's false. So by adding the token the test returns 1, which we subtract 1 to get index.
+        elif self._find_test_tokens(tokens[index-1:index+1]):
+            # find the end of the comparison, either a comma, or an endline.
+            increase = min([i for i in [self._find_token(tokens[index+2:], "COMMA"), self._find_token(tokens[index+2:], "ENDLINE")] if i != 0])+3
+            # then find the last argument, either a comma or a function call.
             last_argument = index
             while last_argument > 0:
-                if tokens[last_argument].name == "COMMA":
+                if tokens[last_argument].name == "COMMA" or tokens[last_argument].name == "FUNCTION":
                     last_argument += 1
                     break
                 last_argument -= 1
-            parsed_value1 = self._parse_value(tokens[last_argument:index+test_token])
-            parsed_value2 = self._parse_value(tokens[index+test_token:])
+            # then parse the values on either side of the comparison.
+            parsed_value1 = self._parse_value(tokens[last_argument:index])
+            parsed_value2 = self._parse_value(tokens[index+1:index+increase-1])
             value1 = parsed_value1[0]
             value2 = parsed_value2[0]
-            increase += parsed_value1[1] + parsed_value2[1]
+            # and finally, create a node from these values and comparison token.
             node = ASTNode("COMPARISON").add_child(
-                    ASTValue(tokens[index+test_token].name, "TEST")).add_child(
+                    ASTValue(tokens[index].name, "TEST")).add_child(
                     ASTNode("VALUE_1").add_child(value1)).add_child(
                     ASTNode("VALUE_2").add_child(value2))
         elif self._parse_check("WORD", tokens, index):
-            if self._find_token(tokens[index:index+1], "FUNCTION") == 0 and self._find_test_tokens(tokens[index:index+2]) == 0 and self._find_variable_assignment_tokens(tokens[index:index+2]) == 0:
+            # test for a word so we can add it as a variable, as long as it's not a function call, part of an assingment, or part of a comparison.
+            if self._find_token(tokens[index:index+1], "FUNCTION") == 0 and self._find_test_tokens(tokens[index:index+3]) == 0 and self._find_variable_assignment_tokens(tokens[index:index+2]) == 0:
                 node = ASTValue(tokens[index].value, "VARIABLE")
         elif self._parse_check("NUMBER", tokens, index):
+            # add any numbers as an ASTValue of NUMBER.
             node = ASTValue(tokens[index].value, "NUMBER")
         return (node, increase)
 
     def _find_token(self, tokens, token):
+        # helpful internal funciton for finding tokens in a given range.
         index = 0
         for i in range(len(tokens)):
             if tokens[i].name == token:
@@ -375,6 +382,7 @@ class Parser:
         return index
 
     def _find_test_tokens(self, tokens):
+        # helpful internal funciton for finding comparison (test) tokens.
         equals_test = self._find_token(tokens, "EQUALS_TEST")
         not_equals_test = self._find_token(tokens, "NOT_EQUAL_TEST")
         less_than_test = self._find_token(tokens, "LESS_THAN_TEST")
@@ -385,6 +393,7 @@ class Parser:
         return min(non_zero) if len(non_zero) > 0 else 0
 
     def _find_variable_assignment_tokens(self, tokens):
+        # helpful interal function for finding assingment tokens.
         equals = self._find_token(tokens, "EQUALS")
         plus_equals = self._find_token(tokens, "PLUS_EQUALS")
         plus_equals_one = self._find_token(tokens, "PLUS_EQUALS_ONE")
@@ -411,6 +420,8 @@ class Parser:
         pass
 
     def _parse_check(self, type, tokens, i):
+        # helpful interal function to check that a token has the required surrounding tokens.
+        # TODO: update for all other tokens.
         if tokens[i].name != type:
             return False
         if type == "FUNCTION":
