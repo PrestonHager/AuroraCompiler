@@ -1,7 +1,7 @@
 # Aurora Compiler
 
-![Documentation Status](https://readthedocs.org/projects/auroracompiler/badge/?version=latest)
-![GitHub License](https://img.shields.io/github/license/PrestonHager/AuroraCompiler.svg?color=blue)
+[![Documentation Status](https://readthedocs.org/projects/auroracompiler/badge/?version=latest)](https://auroracompiler.rtfd.io/en/latest)
+[![GitHub License](https://img.shields.io/github/license/PrestonHager/AuroraCompiler.svg?color=blue)](https://github.com/PrestonHager/AuroraCompiler/blob/master/LICENSE)
 ![Custom badge](https://img.shields.io/endpoint.svg?color=blue&label=progress&url=https%3A%2F%2Fscript.google.com%2Fmacros%2Fs%2FAKfycbyMtmJktHmceU6x_Fam5XdEpx9tijrwZavXOy-cV7SifSqTP1o%2Fexec)
 
 Aurora is a simple language aimed towards low level implementation with readability.
@@ -14,23 +14,23 @@ Later it was adopted for [Startaste][5], an OS developed by I, [Preston Hager][4
 
 The following is a list of what has been completed, what is being worked on, and what is planned in the future.
 Items in **bold** have been completed.
-Items in plain text are in progress.
-Items in *italics* are planned.
+Items in *italics* are in progress.
+Items in plain text are planned.
 
-* **Lexer**
-* Parser
-* Generator
-* Syntax
-  - **Variable Definitions**
-  - **Function Calls**
-  - **Includes**
-  - Builtin Libraries
-  - *Math Operations*
-  - **Function Definitions**
-  - *Lists*
-  - *Comparisons*
-* *Error Handling*
-* Strong Variable Typing
++ **Lexar**
++ **Parser**
++ **Generator**
++ *Syntax*
+  + **Variable Definitions**
+  + **Function Calls**
+  + **Includes**
+  + *Built-in Libraries*
+  + *Math Operations*
+  + *Function Definitions*
+  + Lists
+  + **Comparisons**
++ Error Handling
++ *Strong Variable Typing*
 
 -----
 
