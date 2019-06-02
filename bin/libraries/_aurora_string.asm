@@ -31,3 +31,11 @@ len:
   sub eax, ebx
   pop ebx
   ret
+
+; number to string conversion.
+str:
+  push ebx
+
+  .done:
+  pop ebx
+  ret

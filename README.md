@@ -2,7 +2,7 @@
 
 [![Documentation Status](https://readthedocs.org/projects/auroracompiler/badge/?version=latest)](https://auroracompiler.rtfd.io/en/latest)
 [![GitHub License](https://img.shields.io/github/license/PrestonHager/AuroraCompiler.svg?color=blue)](https://github.com/PrestonHager/AuroraCompiler/blob/master/LICENSE)
-![Custom badge](https://img.shields.io/endpoint.svg?color=blue&label=progress&url=https%3A%2F%2Fscript.google.com%2Fmacros%2Fs%2FAKfycbyMtmJktHmceU6x_Fam5XdEpx9tijrwZavXOy-cV7SifSqTP1o%2Fexec)
+![Progress](https://img.shields.io/endpoint.svg?color=blue&label=progress&url=https%3A%2F%2Fscript.google.com%2Fmacros%2Fs%2FAKfycbyMtmJktHmceU6x_Fam5XdEpx9tijrwZavXOy-cV7SifSqTP1o%2Fexec)
 
 Aurora is a simple language aimed towards low level implementation with readability.
 It was made for practice with compilers, and for an IT class.
