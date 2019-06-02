@@ -1,8 +1,14 @@
 # Aurora Compiler
 
+![Documentation Status](https://readthedocs.org/projects/auroracompiler/badge/?version=latest)
+![GitHub License](https://img.shields.io/github/license/PrestonHager/AuroraCompiler.svg?color=blue)
+![Custom badge](https://img.shields.io/endpoint.svg?color=blue&label=progress&url=https%3A%2F%2Fscript.google.com%2Fmacros%2Fs%2FAKfycbyMtmJktHmceU6x_Fam5XdEpx9tijrwZavXOy-cV7SifSqTP1o%2Fexec)
+
 Aurora is a simple language aimed towards low level implementation with readability.
 It was made for practice with compilers, and for an IT class.
 Later it was adopted for [Startaste][5], an OS developed by I, [Preston Hager][4].
+
+-----
 
 ## Current Progress
 
@@ -26,15 +32,9 @@ Items in *italics* are planned.
 * *Error Handling*
 * Strong Variable Typing
 
-## Getting Started
+-----
 
-First, to make it easier to compiler files, install the `aurora` command.
-To do this add it to the PATH environment variables.
-Please note, you must be in the AuroraCompiler directory to do this.
-Use the following command to do this:
-```
-export PATH=$PATH:$(pwd)/bin
-```
+## Getting Started
 
 Aurora compiler can be run using:
 
@@ -54,6 +54,17 @@ More information can be found with the [aurora compiler documentation][2] on [Re
 Python is needed and can be found at their website, [Python.org][1].
 NASM is needed to compile to `.asm` files, found at [nasm.us][6].
 
+To make it easier to compiler files, install the `aurora` command.
+To do this add it to the PATH environment variables.
+Please note, you must be in the AuroraCompiler directory to do this.
+Use the following command to do this:
+
+```
+export PATH=$PATH:$(pwd)/bin
+```
+
+-----
+
 ## Built With
 
 * [Python][1] - Development language
@@ -61,17 +72,23 @@ NASM is needed to compile to `.asm` files, found at [nasm.us][6].
 * [Read the Docs][3] - Documentation (using Sphinx framework)
 * [A Brain][4] - Some programmer's brain....
 
+-----
+
 ## Contributing
 
 If you would like to Contribute to this project, please do.
 It's open source for a reason after all.
 Simply submit a Pull Request or Issue here on Github.
 
+-----
+
 ## Authors
 
 * **Preston Hager** - *Programmer* - [Github Profile](https://github.com/PrestonHager)
 
 See also the list of [contributors](https://github.com/PrestonHager/AuroraCompiler/blob/master/CONTRIBUTORS.md) who participated in this project.
+
+-----
 
 ## License
 
