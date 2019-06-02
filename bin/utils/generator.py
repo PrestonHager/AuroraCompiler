@@ -115,13 +115,9 @@ class Generator:
             type = children_dict["TYPE"].value
             name = children_dict["NAME"].value
             if type == "STRING":
-                value = "NULL"
-                if name in self.variables["string"]:
-                    for i in range(ceil(len(value)/4)):
-                        generated += f"; {i}\n"
-                else:
-                    self.variables["string"].append(name)
-                    generated_end += f"_{self.uuid}_{name} db \"{value}\"\n"
+                value = children_dict["VALUE"].children[0].children[0].value
+                self.variables["string"].append(name)
+                generated += f"; String: {value}\n"
             elif type == "NUMBER":
                 value = self._generate_value(children_dict["VALUE"].children[0])
                 gen_value = value

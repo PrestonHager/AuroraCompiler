@@ -269,6 +269,10 @@ class Parser:
             elif token.name == "GROUP_START":
                 group_postfix, index = self._parse_value(tokens, index)
                 postfix.add_children(*group_postfix.children)
+            elif token.name == "STRING_DEFINITION":
+                node, increase = self._parse_arguments(tokens, index-1)
+                postfix.add_child(node)
+                index += increase
             elif token.name == "NUMBER":
                 postfix.add_child(ASTValue(token.value, "NUMBER"))
             elif token.name == "WORD":
