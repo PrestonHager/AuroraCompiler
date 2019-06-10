@@ -82,11 +82,13 @@ class Generator:
                         generated += f"mov [_aurora_arg_buffer+{arg_number*4}], DWORD _aurora_{self.uuid}_string_{var}\n"
                         if new:
                             generated_end += f"_aurora_{self.uuid}_string_{var} db \"{argument.value}\", 0\n"
-                    if argument.name == "NUMBER":
+                    elif argument.name == "NUMBER":
                         var, new = self._constant("number", argument.value)
                         generated += f"mov [_aurora_arg_buffer+{arg_number*4}], DWORD _aurora_{self.uuid}_number_{var}\n"
                         if new:
                             generated_end += f"_aurora_{self.uuid}_number_{var} dd {argument.value}\n"
+                    elif argument.name == "VARIABLE":
+                        generated += f"mov [_aurora_arg_buffer+{arg_number*4}], DWORD _{self.uuid}_{argument.value}\n"
                 generated += f"call {name}"
         elif node.name == "FOR":
             children_dict = self._children_dictionary(node)
@@ -117,7 +119,7 @@ class Generator:
             if type == "STRING":
                 value = children_dict["VALUE"].children[0].children[0].value
                 self.variables["string"].append(name)
-                generated += f"; String: {value}\n"
+                generated_end += f"_{self.uuid}_{name} db \"{value}\", 0"
             elif type == "NUMBER":
                 value = self._generate_value(children_dict["VALUE"].children[0])
                 gen_value = value

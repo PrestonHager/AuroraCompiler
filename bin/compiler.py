@@ -7,7 +7,7 @@ from random import randrange
 from utils.lexer import *
 from utils.parser import *
 from utils.generator import *
-from utils.errors import CompilerError
+from utils.errors import CompilerError, ParserError
 from utils.constants import HELP_MESSAGE
 
 class Compiler:
