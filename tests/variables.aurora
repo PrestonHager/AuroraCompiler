@@ -13,4 +13,4 @@ println>greeting;
 // Now for the numbers.
 Number: age = 15;
 // and see if it prints.
-println>str>age;
+println>age;
